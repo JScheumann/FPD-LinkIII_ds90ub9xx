@@ -42,56 +42,87 @@
 #define ENABLE_SYSFS_TP /* /sys/bus/i2c/devices/0-0018 */
 
 static const struct of_device_id ds90ub9702_of_match[] = {
-        {
-                .compatible = "ti,ds90ub9702",
-        },
-        {/* sentinel */},
+		{
+				.compatible = "ti,ds90ub9702",
+		},
+		{/* sentinel */},
 };
 
 const struct regmap_config ds90ub9702_regmap_config = {
-        .reg_bits = 8,
-        .val_bits = 8,
+		.reg_bits = 8,
+		.val_bits = 8,
 };
 
 const struct regmap_config ds90ub971_regmap_config = {
-        .reg_bits = 8,
-        .val_bits = 8,
+		.reg_bits = 8,
+		.val_bits = 8,
 };
 
 /* 4096x2160 */
 static const u8 ds90ub95x_tp_reg_val[] = {
-        /* Indirect Pattern Gen Registers */
-        0xB0, 0x00,
-        0xB1, TI9702_REG_IA_PGEN_CTL,
-        0xB2, (1 << TI9702_PGEN_ENABLE),
-        0xB1, TI9702_REG_IA_PGEN_CFG,
-        0xB2, 0x35,
-        0xB1, TI9702_REG_IA_PGEN_CSI_DI,
-        0xB2, 0x2B,
-        0xB1, TI9702_REG_IA_PGEN_LINE_SIZE1,
-        0xB2, 0x14,
-        0xB1, TI9702_REG_IA_PGEN_LINE_SIZE0,
-        0xB2, 0x00,
-        0xB1, TI9702_REG_IA_PGEN_BAR_SIZE1,
-        0xB2, 0x02,
-        0xB1, TI9702_REG_IA_PGEN_BAR_SIZE0,
-        0xB2, 0x80,
-        0xB1, TI9702_REG_IA_PGEN_ACT_LPF1,
-        0xB2, 0x08,
-        0xB1, TI9702_REG_IA_PGEN_ACT_LPF0,
-        0xB2, 0x70,
-        0xB1, TI9702_REG_IA_PGEN_TOT_LPF1,
-        0xB2, 0x08,
-        0xB1, TI9702_REG_IA_PGEN_TOT_LPF0,
-        0xB2, 0x70,
-        0xB1, TI9702_REG_IA_PGEN_LINE_PD1,
-        0xB2, 0x0B,
-        0xB1, TI9702_REG_IA_PGEN_LINE_PD0,
-        0xB2, 0x93,
-        0xB1, TI9702_REG_IA_PGEN_VBP,
-        0xB2, 0x21,
-        0xB1, TI9702_REG_IA_PGEN_VFP,
-        0xB2, 0x0A,
+		/* Indirect Pattern Gen Registers */
+		0xB0,
+		0x00,
+		0xB1,
+		TI9702_REG_IA_PGEN_CTL,
+		0xB2,
+		(1 << TI9702_PGEN_ENABLE),
+		0xB1,
+		TI9702_REG_IA_PGEN_CFG,
+		0xB2,
+		0x35,
+		0xB1,
+		TI9702_REG_IA_PGEN_CSI_DI,
+		0xB2,
+		0x2B,
+		0xB1,
+		TI9702_REG_IA_PGEN_LINE_SIZE1,
+		0xB2,
+		0x14,
+		0xB1,
+		TI9702_REG_IA_PGEN_LINE_SIZE0,
+		0xB2,
+		0x00,
+		0xB1,
+		TI9702_REG_IA_PGEN_BAR_SIZE1,
+		0xB2,
+		0x02,
+		0xB1,
+		TI9702_REG_IA_PGEN_BAR_SIZE0,
+		0xB2,
+		0x80,
+		0xB1,
+		TI9702_REG_IA_PGEN_ACT_LPF1,
+		0xB2,
+		0x08,
+		0xB1,
+		TI9702_REG_IA_PGEN_ACT_LPF0,
+		0xB2,
+		0x70,
+		0xB1,
+		TI9702_REG_IA_PGEN_TOT_LPF1,
+		0xB2,
+		0x08,
+		0xB1,
+		TI9702_REG_IA_PGEN_TOT_LPF0,
+		0xB2,
+		0x70,
+		0xB1,
+		TI9702_REG_IA_PGEN_LINE_PD1,
+		0xB2,
+		0x0B,
+		0xB1,
+		TI9702_REG_IA_PGEN_LINE_PD0,
+		0xB2,
+		0x93,
+		0xB1,
+		TI9702_REG_IA_PGEN_VBP,
+		0xB2,
+		0x21,
+		0xB1,
+		TI9702_REG_IA_PGEN_VFP,
+		0xB2,
+		0x0A,
 };
 
 /*------------------------------------------------------------------------------
@@ -99,505 +130,505 @@ static const u8 ds90ub95x_tp_reg_val[] = {
  *----------------------------------------------------------------------------*/
 
 static int ds90ub9702_read(struct ds90ub9702_priv *priv, unsigned int reg,
-                           unsigned int *val) {
-    int err;
-    err = regmap_read(priv->regmap, reg, val);
-    if (err) {
-        dev_err(&priv->client->dev,
-                "Cannot read register 0x%02x (%d)!\n", reg, err);
-    }
-    return err;
+						   unsigned int *val) {
+	int err;
+	err = regmap_read(priv->regmap, reg, val);
+	if (err) {
+		dev_err(&priv->client->dev,
+				"Cannot read register 0x%02x (%d)!\n", reg, err);
+	}
+	return err;
 }
 
 static int ds90ub9702_write(const struct ds90ub9702_priv *priv, unsigned int reg,
-                            unsigned int val) {
-    int err;
+							unsigned int val) {
+	int err;
 
-    err = regmap_write(priv->regmap, reg, val);
-    if (err) {
-        dev_err(&priv->client->dev,
-                "Cannot write register 0x%02x (%d)!\n", reg, err);
-    }
-    return err;
+	err = regmap_write(priv->regmap, reg, val);
+	if (err) {
+		dev_err(&priv->client->dev,
+				"Cannot write register 0x%02x (%d)!\n", reg, err);
+	}
+	return err;
 }
 
 static int ds90ub9702_write_rx_port(struct ds90ub9702_priv *priv, int rx_port,
-                                    int addr, int val) {
-    struct device *dev = &priv->client->dev;
-    int err = 0;
-    int port_reg = 0;
+									int addr, int val) {
+	struct device *dev = &priv->client->dev;
+	int err = 0;
+	int port_reg = 0;
 
-    /* rx_port = 0 -> choose rx_port 0
-     * rx_port = 1 -> choose rx_port 1
-     * [...]                            */
-    if (rx_port > 3 || rx_port < 0) {
-        dev_err(dev, "invalid port number %d. Cannot be selected\n",
-                rx_port);
-        err = -EINVAL;
-        goto write_rx_port_err;
-    }
-    /* Check if port is selected, select port if needed */
-    if (priv->sel_rx_port != rx_port) {
-        /*Set RX_WRITE_PORT_3, _2, _1 or _0 */
-        port_reg |= (1 << (TI9702_RX_WRITE_PORT_0 + rx_port));
-        /* Setting RX_READ_PORT to rx_port */
-        port_reg |= (rx_port << TI9702_RX_READ_PORT);
+	/* rx_port = 0 -> choose rx_port 0
+	 * rx_port = 1 -> choose rx_port 1
+	 * [...]                            */
+	if (rx_port > 3 || rx_port < 0) {
+		dev_err(dev, "invalid port number %d. Cannot be selected\n",
+				rx_port);
+		err = -EINVAL;
+		goto write_rx_port_err;
+	}
+	/* Check if port is selected, select port if needed */
+	if (priv->sel_rx_port != rx_port) {
+		/*Set RX_WRITE_PORT_3, _2, _1 or _0 */
+		port_reg |= (1 << (TI9702_RX_WRITE_PORT_0 + rx_port));
+		/* Setting RX_READ_PORT to rx_port */
+		port_reg |= (rx_port << TI9702_RX_READ_PORT);
 
 
-        err = ds90ub9702_write(priv, TI9702_REG_FPD3_PORT_SEL, port_reg);
-        if (unlikely(err)) {
-            dev_err(&priv->client->dev,
-                    "error writing register TI9702_REG_FPD3_PORT_SEL (0x%02x)\n",
-                    TI9702_REG_FPD3_PORT_SEL);
-            goto write_rx_port_err;
-        }
-        priv->sel_rx_port = rx_port;
-    }
-    err = ds90ub9702_write(priv, addr, val);
-    if (unlikely(err)) {
-        dev_err(&priv->client->dev, "error writing register (0x%02x)\n",
-                addr);
-        goto write_rx_port_err;
-    }
+		err = ds90ub9702_write(priv, TI9702_REG_FPD3_PORT_SEL, port_reg);
+		if (unlikely(err)) {
+			dev_err(&priv->client->dev,
+					"error writing register TI9702_REG_FPD3_PORT_SEL (0x%02x)\n",
+					TI9702_REG_FPD3_PORT_SEL);
+			goto write_rx_port_err;
+		}
+		priv->sel_rx_port = rx_port;
+	}
+	err = ds90ub9702_write(priv, addr, val);
+	if (unlikely(err)) {
+		dev_err(&priv->client->dev, "error writing register (0x%02x)\n",
+				addr);
+		goto write_rx_port_err;
+	}
 
-    write_rx_port_err:
-    return err;
+	write_rx_port_err:
+	return err;
 }
 
 #ifdef DEBUG
 static int ds90ub9702_read_rx_port(struct ds90ub9702_priv *priv, int rx_port,
-                  int addr, int *val)
+				  int addr, int *val)
 {
-    struct device *dev = &priv->client->dev;
-    int err = 0;
-    int port_reg = 0;
+	struct device *dev = &priv->client->dev;
+	int err = 0;
+	int port_reg = 0;
 
-    /* rx_port = 0 -> choose rx_port 0
-     * rx_port = 1 -> choose rx_port 1
-     * [...]                            */
-    if(rx_port > 3 || rx_port < 0) {                                //NEW
-        dev_err(dev, "invalid port number %d. Cannot be selected\n",
-            rx_port);
-        err = -EINVAL;
-        goto write_rx_port_err;
-    }
-    /* Check if port is selected, select port if needed */
-    if(priv->sel_rx_port != rx_port) {
-        /*Set RX_WRITE_PORT_3, _2, _1 or _0 */               //NEW
-        port_reg |= (1<<(TI9702_RX_WRITE_PORT_0+rx_port));    //NEW
-        /* Setting RX_READ_PORT to rx_port */                //NEW
-        port_reg |= (rx_port<<TI9702_RX_READ_PORT);           //NEW
+	/* rx_port = 0 -> choose rx_port 0
+	 * rx_port = 1 -> choose rx_port 1
+	 * [...]                            */
+	if(rx_port > 3 || rx_port < 0) {                                //NEW
+		dev_err(dev, "invalid port number %d. Cannot be selected\n",
+			rx_port);
+		err = -EINVAL;
+		goto write_rx_port_err;
+	}
+	/* Check if port is selected, select port if needed */
+	if(priv->sel_rx_port != rx_port) {
+		/*Set RX_WRITE_PORT_3, _2, _1 or _0 */               //NEW
+		port_reg |= (1<<(TI9702_RX_WRITE_PORT_0+rx_port));    //NEW
+		/* Setting RX_READ_PORT to rx_port */                //NEW
+		port_reg |= (rx_port<<TI9702_RX_READ_PORT);           //NEW
 
-        err = ds90ub9702_write(priv, TI9702_REG_FPD3_PORT_SEL, port_reg);
-        if(unlikely(err)) {
-            dev_err(&priv->client->dev,
-                "error writing register TI9702_REG_FPD3_PORT_SEL (0x%02x)\n",
-                TI9702_REG_FPD3_PORT_SEL);
-            goto read_rx_port_err;
-        }
-        priv->sel_rx_port = rx_port;
-    }
-    err = ds90ub9702_read(priv, addr, val);
-    if(unlikely(err)) {
-        dev_err(&priv->client->dev, "error read register (0x%02x)\n",
-            addr);
-        goto read_rx_port_err;
-    }
+		err = ds90ub9702_write(priv, TI9702_REG_FPD3_PORT_SEL, port_reg);
+		if(unlikely(err)) {
+			dev_err(&priv->client->dev,
+				"error writing register TI9702_REG_FPD3_PORT_SEL (0x%02x)\n",
+				TI9702_REG_FPD3_PORT_SEL);
+			goto read_rx_port_err;
+		}
+		priv->sel_rx_port = rx_port;
+	}
+	err = ds90ub9702_read(priv, addr, val);
+	if(unlikely(err)) {
+		dev_err(&priv->client->dev, "error read register (0x%02x)\n",
+			addr);
+		goto read_rx_port_err;
+	}
 
 read_rx_port_err:
-    return err;
+	return err;
 }
 
 static int ds90ub9702_read_ia_reg(struct ds90ub9702_priv *priv, int reg, int *val,
-                 int ia_config)
+				 int ia_config)
 {
-    int err = 0;
+	int err = 0;
 
-    /* ia_configs:
-     *	0000: CSI-2 Pattern Generator & Timing Registers
-     *	0001: FPD-Link III RX Port 0 Reserved Registers
-     *	0010: FPD-Link III RX Port 1 Reserved Registers
-     *	0101: FPD-Link III RX Shared Reserved Registers
-     *	0110: Simultaneous write to FPD-Link III RX Reserved */
+	/* ia_configs:
+	 *	0000: CSI-2 Pattern Generator & Timing Registers
+	 *	0001: FPD-Link III RX Port 0 Reserved Registers
+	 *	0010: FPD-Link III RX Port 1 Reserved Registers
+	 *	0101: FPD-Link III RX Shared Reserved Registers
+	 *	0110: Simultaneous write to FPD-Link III RX Reserved */
 
-    /* Check if bank is selected, select bank if needed */
-    if(priv->sel_ia_config != ia_config) {
-        err = ds90ub9702_write(priv, TI9702_REG_IND_ACC_CTL, ia_config);
-        if(unlikely(err)) {
-            dev_err(&priv->client->dev,
-                "error writing register TI9702_REG_IND_ACC_CTL (0x%02x)\n",
-                TI9702_REG_IND_ACC_CTL);
-            goto read_ia_reg_err;
-        }
-        priv->sel_ia_config = ia_config;
-    }
-    err = ds90ub9702_write(priv, TI9702_REG_IND_ACC_ADDR, reg);
-    if(unlikely(err)) {
-        dev_err(&priv->client->dev,
-            "error writing register TI9702_REG_IND_ACC_ADDR (0x%02x)\n",
-            TI9702_REG_IND_ACC_ADDR);
-        goto read_ia_reg_err;
-    }
+	/* Check if bank is selected, select bank if needed */
+	if(priv->sel_ia_config != ia_config) {
+		err = ds90ub9702_write(priv, TI9702_REG_IND_ACC_CTL, ia_config);
+		if(unlikely(err)) {
+			dev_err(&priv->client->dev,
+				"error writing register TI9702_REG_IND_ACC_CTL (0x%02x)\n",
+				TI9702_REG_IND_ACC_CTL);
+			goto read_ia_reg_err;
+		}
+		priv->sel_ia_config = ia_config;
+	}
+	err = ds90ub9702_write(priv, TI9702_REG_IND_ACC_ADDR, reg);
+	if(unlikely(err)) {
+		dev_err(&priv->client->dev,
+			"error writing register TI9702_REG_IND_ACC_ADDR (0x%02x)\n",
+			TI9702_REG_IND_ACC_ADDR);
+		goto read_ia_reg_err;
+	}
 
-    err = ds90ub9702_read(priv, TI9702_REG_IND_ACC_DATA, val);
-    if(unlikely(err)) {
-        dev_err(&priv->client->dev,
-            "error reading register TI9702_REG_IND_ACC_DATA (0x%02x)\n",
-            TI9702_REG_IND_ACC_DATA);
-        goto read_ia_reg_err;
-    }
+	err = ds90ub9702_read(priv, TI9702_REG_IND_ACC_DATA, val);
+	if(unlikely(err)) {
+		dev_err(&priv->client->dev,
+			"error reading register TI9702_REG_IND_ACC_DATA (0x%02x)\n",
+			TI9702_REG_IND_ACC_DATA);
+		goto read_ia_reg_err;
+	}
 
 read_ia_reg_err:
-    return err;
+	return err;
 }
 #endif
 
 static int ds90ub9702_disable_testpattern(struct ds90ub9702_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    int err = 0;
-    /* Indirect Pattern Gen Registers */
-    err = ds90ub9702_write(priv, 0xB0, 0x00);
-    if (err)
-        goto init_err;
-    err = ds90ub9702_write(priv, 0xB1, TI9702_REG_IA_PGEN_CTL);
-    if (err)
-        goto init_err;
-    err = ds90ub9702_write(priv, 0xB2, (0 << TI9702_PGEN_ENABLE));     //NEW  OLD:TI9702_PGEB_ENABLE
-    if (err)
-        goto init_err;
-    init_err:
-    dev_info(dev, "%s: disable test pattern failed\n", __func__);
-    return err;
+	struct device *dev = &priv->client->dev;
+	int err = 0;
+	/* Indirect Pattern Gen Registers */
+	err = ds90ub9702_write(priv, 0xB0, 0x00);
+	if (err)
+		goto init_err;
+	err = ds90ub9702_write(priv, 0xB1, TI9702_REG_IA_PGEN_CTL);
+	if (err)
+		goto init_err;
+	err = ds90ub9702_write(priv, 0xB2, (0 << TI9702_PGEN_ENABLE));     //NEW  OLD:TI9702_PGEB_ENABLE
+	if (err)
+		goto init_err;
+	init_err:
+	dev_info(dev, "%s: disable test pattern failed\n", __func__);
+	return err;
 }
 
 static int ds90ub9702_init_testpattern(struct ds90ub9702_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    int i, err = 0;
-    for (i = 0; i < ARRAY_SIZE(ds90ub95x_tp_reg_val); i += 2) {
+	struct device *dev = &priv->client->dev;
+	int i, err = 0;
+	for (i = 0; i < ARRAY_SIZE(ds90ub95x_tp_reg_val); i += 2) {
 
-        err = ds90ub9702_write(priv, ds90ub95x_tp_reg_val[i],
-                               ds90ub95x_tp_reg_val[i + 1]);
-        if (unlikely(err)) {
-            dev_info(dev, "%s: enable test pattern failed\n", __func__);
-            return err;
-        }
-    }
-    dev_info(dev, "%s: enable test pattern successful\n", __func__);
-    return err;
+		err = ds90ub9702_write(priv, ds90ub95x_tp_reg_val[i],
+							   ds90ub95x_tp_reg_val[i + 1]);
+		if (unlikely(err)) {
+			dev_info(dev, "%s: enable test pattern failed\n", __func__);
+			return err;
+		}
+	}
+	dev_info(dev, "%s: enable test pattern successful\n", __func__);
+	return err;
 }
 
 #ifdef DEBUG
 static int ds90ub9702_debug_prints(struct ds90ub9702_priv *priv)
 {
-    int i, val, ia_config = 0, err = 0;
-    /* print CSI timing of tx port 0 */
-    dev_info(dev, "%s: CSI timing\n", __func__);
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_PREP, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: TCK_PREP: 0x%02x\n", __func__, val);
+	int i, val, ia_config = 0, err = 0;
+	/* print CSI timing of tx port 0 */
+	dev_info(dev, "%s: CSI timing\n", __func__);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_PREP, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: TCK_PREP: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_ZERO, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: TCK_ZERO: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_ZERO, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: TCK_ZERO: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_TRAIL, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: TCK_TRAIL: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_TRAIL, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: TCK_TRAIL: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_POST, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: TCK_POST: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TCK_POST, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: TCK_POST: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_PREP, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: THS_PREP: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_PREP, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: THS_PREP: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_ZERO, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: THS_ZERO: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_ZERO, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: THS_ZERO: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_TRAIL, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: THS_TRAIL: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_TRAIL, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: THS_TRAIL: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_EXIT, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: THS_EXIT: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_THS_EXIT, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: THS_EXIT: 0x%02x\n", __func__, val);
 
-    err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TPLX, &val,
-                    ia_config);
-    if(unlikely(err))
-        return err;
-    dev_info(dev, "%s: CSI0_TPLX: 0x%02x\n", __func__, val);
+	err = ds90ub9702_read_ia_reg(priv, TI9702_REG_IA_CSI0_TPLX, &val,
+					ia_config);
+	if(unlikely(err))
+		return err;
+	dev_info(dev, "%s: CSI0_TPLX: 0x%02x\n", __func__, val);
 
-    /* measure refclk */
-    for(i = 0; i < 5; i++) {
-        err = ds90ub9702_read(priv, TI9702_REG_REFCLK_FREQ, &val);
-        if(err)
-            return err;
-        dev_info(dev, "%s: REFCLK_FREQ measurement %d, %d\n", __func__,
-             i, val);
-    }
-    return err;
+	/* measure refclk */
+	for(i = 0; i < 5; i++) {
+		err = ds90ub9702_read(priv, TI9702_REG_REFCLK_FREQ, &val);
+		if(err)
+			return err;
+		dev_info(dev, "%s: REFCLK_FREQ measurement %d, %d\n", __func__,
+			 i, val);
+	}
+	return err;
 };
 #endif
 
 static int ds90ub9702_init(struct ds90ub9702_priv *priv, int rx_port) {
-    struct device *dev = &priv->client->dev;
-    unsigned char dev_id, rev;
-    int i, val, val2;
-    int err = 0;
-    // char id_code[TI9702_RX_ID_LENGTH + 1];
-    int ser_nr = 0;
-    struct ds90ub971_priv *ds90ub971;
-    int pr_value;
+	struct device *dev = &priv->client->dev;
+	unsigned char dev_id, rev;
+	int i, val, val2;
+	int err = 0;
+	// char id_code[TI9702_RX_ID_LENGTH + 1];
+	int ser_nr = 0;
+	struct ds90ub971_priv *ds90ub971;
+	int pr_value;
 
-    /*----------------------------------------------------------------------
-     *  init deserializer
-     *--------------------------------------------------------------------*/
-    dev_info(dev, "%s starting\n", __func__);
+	/*----------------------------------------------------------------------
+	 *  init deserializer
+	 *--------------------------------------------------------------------*/
+	dev_info(dev, "%s starting\n", __func__);
 
-    /* Read device id of deserializer */
-    err = ds90ub9702_read(priv, TI9702_REG_I2C_DEV_ID, &val);
-    if (unlikely(err))
-        goto init_err;
+	/* Read device id of deserializer */
+	err = ds90ub9702_read(priv, TI9702_REG_I2C_DEV_ID, &val);
+	if (unlikely(err))
+		goto init_err;
 
-    dev_id = (unsigned char) val;
+	dev_id = (unsigned char) val;
 
-    /* Read revision ID of deserializer */
-    err = ds90ub9702_read(priv, TI9702_REG_REV_MASK_ID, &val);        //NEW NAME REG_REVISION
-    if (unlikely(err))
-        goto init_err;
+	/* Read revision ID of deserializer */
+	err = ds90ub9702_read(priv, TI9702_REG_REV_MASK_ID, &val);        //NEW NAME REG_REVISION
+	if (unlikely(err))
+		goto init_err;
 
-    rev = (unsigned char) val;
+	rev = (unsigned char) val;
 
 	/*  //Read FPD3_RX_ID registers                                   //NEW
 	   memset(id_code, 0, sizeof(id_code));
 	   for(i = 0; i < TI9702_RX_ID_LENGTH; i++) {
 		   err = ds90ub9702_read(priv, TI9702_REG_FPD3_RX_ID0 + i, &val);
 		   if(err) {
-			    goto init_err;
+				goto init_err;
 		   }
 		   id_code[i] = (char)val;
 	   }
 	   dev_info(dev, "%s: device ID: 0x%x, code:%s, revision: 0x%x\n",
-		     __func__, dev_id, id_code, rev);  */
+			 __func__, dev_id, id_code, rev);  */
 
-    /* disable BuiltIn Self Test */
-    err = ds90ub9702_write(priv, TI9702_REG_BIST_CTL, 0);
-    if (unlikely(err))
-        goto init_err;
+	/* disable BuiltIn Self Test */
+	err = ds90ub9702_write(priv, TI9702_REG_BIST_CTL, 0);
+	if (unlikely(err))
+		goto init_err;
 
 
-    /*  NEW  */
-    /* CAREFUL: CURRENTLY ONLY CSI-0 supported from this driver
-     * for read and write.
-     * This register should be written before writing or reading
-     * any CSI registers.
-     * With this register it can be selected if CSI-0, CSI-1 or both
-     * should be written and which one to readout if the CSI registers
-     * are read.
-     */
-    /* Enable write for TX port registers */
-    val = priv->write_tx0 << TI9702_TX_WRITE_PORT_0;
-    err = ds90ub9702_write(priv, TI9702_REG_CSI_PORT_SEL, val);
-    if (unlikely(err))
-        goto ser_init_failed;
+	/*  NEW  */
+	/* CAREFUL: CURRENTLY ONLY CSI-0 supported from this driver
+	 * for read and write.
+	 * This register should be written before writing or reading
+	 * any CSI registers.
+	 * With this register it can be selected if CSI-0, CSI-1 or both
+	 * should be written and which one to readout if the CSI registers
+	 * are read.
+	 */
+	/* Enable write for TX port registers */
+	val = priv->write_tx0 << TI9702_TX_WRITE_PORT_0;
+	err = ds90ub9702_write(priv, TI9702_REG_CSI_PORT_SEL, val);
+	if (unlikely(err))
+		goto ser_init_failed;
 
-    /* val = priv->write_tx1<<TI9702_TX_WRITE_PORT_1;
-    err = ds90ub9702_write(priv, TI9702_REG_CSI_PORT_SEL, val);
-    if(unlikely(err))
-        goto ser_init_failed;
-    */
-    /*  NEW  */
+	/* val = priv->write_tx1<<TI9702_TX_WRITE_PORT_1;
+	err = ds90ub9702_write(priv, TI9702_REG_CSI_PORT_SEL, val);
+	if(unlikely(err))
+		goto ser_init_failed;
+	*/
+	/*  NEW  */
 
-    /* set CSI speed (REFCLK 200 MHz by default)                        //NEW
-    *  0_00 : 1.6 Gbps serial rate
-    *  0_01 : 1.2 Gbps serial rate
-    *  0_10 : 800 Mbps serial rate
-    *  0_11 : 400 Mbps serial rate
-    *  1_xx : 2.5 Gbps serial rate */
-    switch (priv->csi_lane_speed) {
-        /* case 2500:                                                          //NEW
-             val = 0x00;
-             val2 = 0x1;
-             break;
-         case 400:
-             val = 0x3;
-             val2 = 0x0;
-             break;
-         case 800:
-             val = 0x2;
-             val2 = 0x0;
-             break;
-         case 1200:                                                          //NEW
-             val = 0x1;
-             val2 = 0x0;
-             break;
-         default:
-             val = 0x0;
-             val2 = 0x0;
-             break;*/
+	/* set CSI speed (REFCLK 200 MHz by default)                        //NEW
+	*  0_00 : 1.6 Gbps serial rate
+	*  0_01 : 1.2 Gbps serial rate
+	*  0_10 : 800 Mbps serial rate
+	*  0_11 : 400 Mbps serial rate
+	*  1_xx : 2.5 Gbps serial rate */
+	switch (priv->csi_lane_speed) {
+		/* case 2500:                                                          //NEW
+			 val = 0x00;
+			 val2 = 0x1;
+			 break;
+		 case 400:
+			 val = 0x3;
+			 val2 = 0x0;
+			 break;
+		 case 800:
+			 val = 0x2;
+			 val2 = 0x0;
+			 break;
+		 case 1200:                                                          //NEW
+			 val = 0x1;
+			 val2 = 0x0;
+			 break;
+		 default:
+			 val = 0x0;
+			 val2 = 0x0;
+			 break;*/
 
-        case 400:
-            ds90ub9702_write(priv, 0x1F,0x03);
-            ds90ub9702_write(priv, 0xC9,0x10);
-            ds90ub9702_write(priv, 0xB0,0x1C);
-            ds90ub9702_write(priv, 0xB1,0x92);
-            ds90ub9702_write(priv, 0xB2,0xA0);
-            break;
-            case 800:
-                ds90ub9702_write(priv, 0x1F,0x02);
-                ds90ub9702_write(priv, 0xC9,0x10);
-                ds90ub9702_write(priv, 0xB0,0x1C);
-                ds90ub9702_write(priv, 0xB1,0x92);
-                ds90ub9702_write(priv, 0xB2,0x90);
-                ds90ub9702_write(priv, 0xB1,0x4F);
-                ds90ub9702_write(priv, 0xB2,0x2A);
-                ds90ub9702_write(priv, 0xB1,0x4B);
-                ds90ub9702_write(priv, 0xB2,0x2A);
-                break;
-                case 1200:
-                    ds90ub9702_write(priv, 0x1F,0x01);
-                    ds90ub9702_write(priv, 0xC9,0x18);
-                    ds90ub9702_write(priv, 0xB0,0x1C);
-                    ds90ub9702_write(priv, 0xB1,0x92);
-                    ds90ub9702_write(priv, 0xB2,0x90);
-                    break;
-                    case 1500:
-                        ds90ub9702_write(priv, 0x1F,0x00);
-                        ds90ub9702_write(priv, 0xC9,0x0F);
-                        ds90ub9702_write(priv, 0xB0,0x1C);
-                        ds90ub9702_write(priv, 0xB1,0x92);
-                        ds90ub9702_write(priv, 0xB2,0x80);
-                        break;
-                        case 1600:
-                            ds90ub9702_write(priv, 0x1F,0x00);
-                            ds90ub9702_write(priv, 0xC9,0x10);
-                            ds90ub9702_write(priv, 0xB0,0x1C);
-                            ds90ub9702_write(priv, 0xB1,0x92);
-                            ds90ub9702_write(priv, 0xB2,0x80);
-                            ds90ub9702_write(priv, 0xB1,0x4B);
-                            ds90ub9702_write(priv, 0xB2,0x2A);
-                            break;
-                            case 2500:
-                                ds90ub9702_write(priv, 0x1F,0x10);
-                                ds90ub9702_write(priv, 0xC9,0x19);
-                                ds90ub9702_write(priv, 0xB0,0x1C);
-                                ds90ub9702_write(priv, 0xB1,0x92);
-                                ds90ub9702_write(priv, 0xB2,0x80);
-                                break;
-    }
+		case 400:
+			ds90ub9702_write(priv, 0x1F,0x03);
+			ds90ub9702_write(priv, 0xC9,0x10);
+			ds90ub9702_write(priv, 0xB0,0x1C);
+			ds90ub9702_write(priv, 0xB1,0x92);
+			ds90ub9702_write(priv, 0xB2,0xA0);
+			break;
+			case 800:
+				ds90ub9702_write(priv, 0x1F,0x02);
+				ds90ub9702_write(priv, 0xC9,0x10);
+				ds90ub9702_write(priv, 0xB0,0x1C);
+				ds90ub9702_write(priv, 0xB1,0x92);
+				ds90ub9702_write(priv, 0xB2,0x90);
+				ds90ub9702_write(priv, 0xB1,0x4F);
+				ds90ub9702_write(priv, 0xB2,0x2A);
+				ds90ub9702_write(priv, 0xB1,0x4B);
+				ds90ub9702_write(priv, 0xB2,0x2A);
+				break;
+				case 1200:
+					ds90ub9702_write(priv, 0x1F,0x01);
+					ds90ub9702_write(priv, 0xC9,0x18);
+					ds90ub9702_write(priv, 0xB0,0x1C);
+					ds90ub9702_write(priv, 0xB1,0x92);
+					ds90ub9702_write(priv, 0xB2,0x90);
+					break;
+					case 1500:
+						ds90ub9702_write(priv, 0x1F,0x00);
+						ds90ub9702_write(priv, 0xC9,0x0F);
+						ds90ub9702_write(priv, 0xB0,0x1C);
+						ds90ub9702_write(priv, 0xB1,0x92);
+						ds90ub9702_write(priv, 0xB2,0x80);
+						break;
+						case 1600:
+							ds90ub9702_write(priv, 0x1F,0x00);
+							ds90ub9702_write(priv, 0xC9,0x10);
+							ds90ub9702_write(priv, 0xB0,0x1C);
+							ds90ub9702_write(priv, 0xB1,0x92);
+							ds90ub9702_write(priv, 0xB2,0x80);
+							ds90ub9702_write(priv, 0xB1,0x4B);
+							ds90ub9702_write(priv, 0xB2,0x2A);
+							break;
+							case 2500:
+								ds90ub9702_write(priv, 0x1F,0x10);
+								ds90ub9702_write(priv, 0xC9,0x19);
+								ds90ub9702_write(priv, 0xB0,0x1C);
+								ds90ub9702_write(priv, 0xB1,0x92);
+								ds90ub9702_write(priv, 0xB2,0x80);
+								break;
+	}
 //err = ds90ub9702_write(priv, TI9702_REG_CSI_PLL_CTL,
 //                           (val << TI9702_CSI_TX_SPEED) | (val2 << TI9702_CSI_TX_SPEED2)); //NEW
-    //if (unlikely(err))
-    //   goto init_err;
+	//if (unlikely(err))
+	//   goto init_err;
 #ifdef DEBUG
-    err = ds90ub9702_debug_prints(priv);
-    if(unlikely(err))
-        goto init_err;
+	err = ds90ub9702_debug_prints(priv);
+	if(unlikely(err))
+		goto init_err;
 #endif
-    /* set number of csi lanes */
-    switch (priv->csi_lane_count) {
-        case 1:
-            val = TI9702_CSI_1_LANE;
-            break;
-        case 2:
-            val = TI9702_CSI_2_LANE;
-            break;
-        case 3:
-            val = TI9702_CSI_3_LANE;
-            break;
-        default:
-            val = TI9702_CSI_4_LANE;
-            break;
-    }
+	/* set number of csi lanes */
+	switch (priv->csi_lane_count) {
+		case 1:
+			val = TI9702_CSI_1_LANE;
+			break;
+		case 2:
+			val = TI9702_CSI_2_LANE;
+			break;
+		case 3:
+			val = TI9702_CSI_3_LANE;
+			break;
+		default:
+			val = TI9702_CSI_4_LANE;
+			break;
+	}
 
-    err = ds90ub9702_write(priv, TI9702_REG_CSI_CTL,
-                           (1 << TI9702_CSI_ENABLE) |
-                           (priv->conts_clk << TI9702_CSI_CONTS_CLOCK) |
-                           (val << TI9702_CSI_LANE_COUNT) |
-                           (1 << TI9702_CSI_CAL_EN));
+	err = ds90ub9702_write(priv, TI9702_REG_CSI_CTL,
+						   (1 << TI9702_CSI_ENABLE) |
+						   (priv->conts_clk << TI9702_CSI_CONTS_CLOCK) |
+						   (val << TI9702_CSI_LANE_COUNT) |
+						   (1 << TI9702_CSI_CAL_EN));
 
-    dev_info(dev, "CSI_REG_value: %u\n", (1 << TI9702_CSI_ENABLE) |
-    (priv->conts_clk << TI9702_CSI_CONTS_CLOCK) |
-    (val << TI9702_CSI_LANE_COUNT) |
-    (1 << TI9702_CSI_CAL_EN));
-    err = ds90ub9702_read(priv, TI9702_REG_CSI_CTL, &pr_value);
-    dev_info(dev, "CSI_REG_value after read: %u\n", pr_value);
+	dev_info(dev, "CSI_REG_value: %u\n", (1 << TI9702_CSI_ENABLE) |
+	(priv->conts_clk << TI9702_CSI_CONTS_CLOCK) |
+	(val << TI9702_CSI_LANE_COUNT) |
+	(1 << TI9702_CSI_CAL_EN));
+	err = ds90ub9702_read(priv, TI9702_REG_CSI_CTL, &pr_value);
+	dev_info(dev, "CSI_REG_value after read: %u\n", pr_value);
 
 
-    if (unlikely(err))
-        goto init_err;
+	if (unlikely(err))
+		goto init_err;
 
-    /* replicate csi port 0 or 1 to csi port 2 */                     /*  NEW    */
-    msleep(500);
+	/* replicate csi port 0 or 1 to csi port 2 */                     /*  NEW    */
+	msleep(500);
 
-    /* choose csi port 0 or 1 for replication */
-    val = priv->repl_switch << TI9702_REPLICATE_CSI2_SEL;
-    err = ds90ub9702_write(priv, TI9702_REG_CSI_EXCLUSIVE_FWD2, val);
+	/* choose csi port 0 or 1 for replication */
+	val = priv->repl_switch << TI9702_REPLICATE_CSI2_SEL;
+	err = ds90ub9702_write(priv, TI9702_REG_CSI_EXCLUSIVE_FWD2, val);
 
-    if (unlikely(err))
-        goto init_err;
+	if (unlikely(err))
+		goto init_err;
 
-    /* enable replication for csi port 2 */
-    val = priv->replicate << TI9702_CSI_PORT2_EN;
-    err = ds90ub9702_write(priv, TI9702_REG_CSI_PORT2_FIFO_CTRL, val);
+	/* enable replication for csi port 2 */
+	val = priv->replicate << TI9702_CSI_PORT2_EN;
+	err = ds90ub9702_write(priv, TI9702_REG_CSI_PORT2_FIFO_CTRL, val);
 
-    if (unlikely(err))
-        goto init_err;
-    /*   NEW    */
+	if (unlikely(err))
+		goto init_err;
+	/*   NEW    */
 
-    msleep(500);
+	msleep(500);
 
-    /* check if test pattern should be turned on */
-    if (priv->test_pattern == 1) {
-        dev_info(dev, "%s: deserializer init testpattern\n", __func__);
-        err = ds90ub9702_init_testpattern(priv);
-        if (unlikely(err)) {
-            dev_info(dev,
-                     "%s: deserializer init testpattern failed\n",
-                     __func__);
-        }
-    }
+	/* check if test pattern should be turned on */
+	if (priv->test_pattern == 1) {
+		dev_info(dev, "%s: deserializer init testpattern\n", __func__);
+		err = ds90ub9702_init_testpattern(priv);
+		if (unlikely(err)) {
+			dev_info(dev,
+					 "%s: deserializer init testpattern failed\n",
+					 __func__);
+		}
+	}
 
-    /* Setting PASS and LOCK to "all enabled receiver ports */
-    val = 0b00000000;                                                   //NEW
-    err = ds90ub9702_write(priv, TI9702_REG_RX_PORT_CTL, val);
-    if (unlikely(err))
-        goto init_err;
+	/* Setting PASS and LOCK to "all enabled receiver ports */
+	val = 0b00000000;                                                   //NEW
+	err = ds90ub9702_write(priv, TI9702_REG_RX_PORT_CTL, val);
+	if (unlikely(err))
+		goto init_err;
 
-    /* for loop goes through each serializer */
-    for (; ser_nr < priv->num_ser; ser_nr++) {
-        ds90ub971 = priv->ser[ser_nr];
-        if (ds90ub971->initialized == 0) {
-            continue;
-        }
-        rx_port = ds90ub971->rx_channel;
+	/* for loop goes through each serializer */
+	for (; ser_nr < priv->num_ser; ser_nr++) {
+		ds90ub971 = priv->ser[ser_nr];
+		if (ds90ub971->initialized == 0) {
+			continue;
+		}
+		rx_port = ds90ub971->rx_channel;
 
-        dev_info(dev, "%s: start init of serializer rx_port %i\n",
-                 __func__, rx_port);
+		dev_info(dev, "%s: start init of serializer rx_port %i\n",
+				 __func__, rx_port);
 
-        /* Get TI9702_REG_RX_PORT_CTL and enable receiver rx_port */
-        err = ds90ub9702_read(priv, TI9702_REG_RX_PORT_CTL, &val);
-        if (unlikely(err))
-            goto ser_init_failed;
+		/* Get TI9702_REG_RX_PORT_CTL and enable receiver rx_port */
+		err = ds90ub9702_read(priv, TI9702_REG_RX_PORT_CTL, &val);
+		if (unlikely(err))
+			goto ser_init_failed;
 
 		val |= (1<<(TI9702_PORT0_EN+rx_port));
 		val |= (ds90ub971->i2c_channel<<(TI9702_BCC0_MAP+rx_port));       //NEW
@@ -605,32 +636,32 @@ static int ds90ub9702_init(struct ds90ub9702_priv *priv, int rx_port) {
 		if(unlikely(err))
 			goto ser_init_failed;
 
-        /* wait for receiver to calibrate link */
-        msleep(400);
+		/* wait for receiver to calibrate link */
+		msleep(400);
 
-        /* enable csi forwarding */
-        err = ds90ub9702_read(priv, TI9702_REG_FWD_CTL1, &val);
-        if (unlikely(err))
-            goto ser_init_failed;
+		/* enable csi forwarding */
+		err = ds90ub9702_read(priv, TI9702_REG_FWD_CTL1, &val);
+		if (unlikely(err))
+			goto ser_init_failed;
 
-        val &= (0xEF << rx_port);
-        err = ds90ub9702_write(priv, TI9702_REG_FWD_CTL1, val);
-        if (unlikely(err))
-            goto ser_init_failed;
+		val &= (0xEF << rx_port);
+		err = ds90ub9702_write(priv, TI9702_REG_FWD_CTL1, val);
+		if (unlikely(err))
+			goto ser_init_failed;
 
-        msleep(500);
+		msleep(500);
 
-        /* config back channel RX port [specific register] */
-        err = ds90ub9702_write_rx_port(priv, rx_port,
-                                       TI9702_REG_BCC_CONFIG,
-                                       (TI9702_BC_FREQ_50M << TI9702_BC_FREQ_SELECT) |
-                                       (1 << TI9702_BC_CRC_GENERATOR_ENABLE) |
-                                       //NEW  OLD: TI9702_BC_CRC_GENERAOTR
-                                       (1 << TI9702_BC_ALWAYS_ON) |
-                                       (ds90ub971->i2c_pt << TI9702_I2C_PASS_THROUGH_ALL) |
-                                       (1 << TI9702_I2C_PASS_THROUGH));
-        if (unlikely(err))
-            goto ser_init_failed;
+		/* config back channel RX port [specific register] */
+		err = ds90ub9702_write_rx_port(priv, rx_port,
+									   TI9702_REG_BCC_CONFIG,
+									   (TI9702_BC_FREQ_50M << TI9702_BC_FREQ_SELECT) |
+									   (1 << TI9702_BC_CRC_GENERATOR_ENABLE) |
+									   //NEW  OLD: TI9702_BC_CRC_GENERAOTR
+									   (1 << TI9702_BC_ALWAYS_ON) |
+									   (ds90ub971->i2c_pt << TI9702_I2C_PASS_THROUGH_ALL) |
+									   (1 << TI9702_I2C_PASS_THROUGH));
+		if (unlikely(err))
+			goto ser_init_failed;
 
 		 /* wait for back channel */
 		for(i = 0; i < 50; i++) {
@@ -653,681 +684,681 @@ static int ds90ub9702_init(struct ds90ub9702_priv *priv, int rx_port) {
 			goto ser_init_failed;
 		}
 #ifdef DEBUG
-        /* check PORT_STS1 */
-        for(i = 0; i < 2; i++) {
-            err = ds90ub9702_read_rx_port(priv, rx_port,
-                            TI9702_REG_RX_PORT_STS1,
-                            &val);
-            if(unlikely(err))
-                goto ser_init_failed;
-            dev_info(dev, "%s: RX_PORT_STS1 read %d, 0x%02x\n",
-                 __func__, i, val);
-        }
+		/* check PORT_STS1 */
+		for(i = 0; i < 2; i++) {
+			err = ds90ub9702_read_rx_port(priv, rx_port,
+							TI9702_REG_RX_PORT_STS1,
+							&val);
+			if(unlikely(err))
+				goto ser_init_failed;
+			dev_info(dev, "%s: RX_PORT_STS1 read %d, 0x%02x\n",
+				 __func__, i, val);
+		}
 
-        /* check PORT_STS2 */
-        for(i = 0; i < 2; i++) {
-            err = ds90ub9702_read_rx_port(priv, rx_port,
-                            TI9702_REG_RX_PORT_STS2,
-                            &val);
-            if(unlikely(err))
-                goto ser_init_failed;
-            dev_info(dev, "%s: RX_PORT_STS2 read %d, 0x%02x\n",
-                 __func__, i, val);
-        }
+		/* check PORT_STS2 */
+		for(i = 0; i < 2; i++) {
+			err = ds90ub9702_read_rx_port(priv, rx_port,
+							TI9702_REG_RX_PORT_STS2,
+							&val);
+			if(unlikely(err))
+				goto ser_init_failed;
+			dev_info(dev, "%s: RX_PORT_STS2 read %d, 0x%02x\n",
+				 __func__, i, val);
+		}
 #endif
-        /* setup i2c forwarding */
-        err = ds90ub9702_write_rx_port(priv, rx_port, TI9702_REG_SER_ALIAS_ID,
-                                       (ds90ub971->i2c_address << TI9702_SER_ALIAS_ID));
-        if (unlikely(err))
-            goto ser_init_failed;
+		/* setup i2c forwarding */
+		err = ds90ub9702_write_rx_port(priv, rx_port, TI9702_REG_SER_ALIAS_ID,
+									   (ds90ub971->i2c_address << TI9702_SER_ALIAS_ID));
+		if (unlikely(err))
+			goto ser_init_failed;
 
-        /* Serializer GPIO control */
-        err = ds90ub9702_write_rx_port(priv, rx_port, TI9702_REG_BC_GPIO_CTL0,
-                                       (ds90ub971->gpio0_oc << TI9702_BC_GPIO0_SEL) |
-                                       (ds90ub971->gpio1_oc << TI9702_BC_GPIO1_SEL));
-        if (err)
-            dev_info(dev, "%s: could not set TI9702_REG_BC_GPIO_CTL0\n",
-                     __func__);
-        else
-            dev_info(dev, "%s: Successfully set TI9702_REG_BC_GPIO_CTL0\n",
-                     __func__);
+		/* Serializer GPIO control */
+		err = ds90ub9702_write_rx_port(priv, rx_port, TI9702_REG_BC_GPIO_CTL0,
+									   (ds90ub971->gpio0_oc << TI9702_BC_GPIO0_SEL) |
+									   (ds90ub971->gpio1_oc << TI9702_BC_GPIO1_SEL));
+		if (err)
+			dev_info(dev, "%s: could not set TI9702_REG_BC_GPIO_CTL0\n",
+					 __func__);
+		else
+			dev_info(dev, "%s: Successfully set TI9702_REG_BC_GPIO_CTL0\n",
+					 __func__);
 
-        err = ds90ub9702_write_rx_port(priv, rx_port, TI9702_REG_BC_GPIO_CTL1,
-                                       (ds90ub971->gpio2_oc << TI9702_BC_GPIO2_SEL) |
-                                       (ds90ub971->gpio3_oc << TI9702_BC_GPIO3_SEL));
-        if (err)
-            dev_info(dev, "%s: could not set TI9702_REG_BC_GPIO_CTL1\n",
-                     __func__);
-        else
-            dev_info(dev, "%s: Successfully set TI9702_REG_BC_GPIO_CTL1\n",
-                     __func__);
+		err = ds90ub9702_write_rx_port(priv, rx_port, TI9702_REG_BC_GPIO_CTL1,
+									   (ds90ub971->gpio2_oc << TI9702_BC_GPIO2_SEL) |
+									   (ds90ub971->gpio3_oc << TI9702_BC_GPIO3_SEL));
+		if (err)
+			dev_info(dev, "%s: could not set TI9702_REG_BC_GPIO_CTL1\n",
+					 __func__);
+		else
+			dev_info(dev, "%s: Successfully set TI9702_REG_BC_GPIO_CTL1\n",
+					 __func__);
 
-        /* set i2c slave ids and aliases */
-        for (i = 0; (i < ds90ub971->i2c_alias_num) && (i < NUM_ALIAS); i++) {
-            val = ds90ub971->i2c_slave[i];
-            if (val == 0) {
-                continue;
-            }
-            err = ds90ub9702_write_rx_port(priv, rx_port,
-                                           TI9702_REG_SLAVE_ID0 + i,
-                                           (val << TI9702_ALIAS_ID0));
-            if (unlikely(err))
-                goto ser_init_failed;
-            dev_info(dev, "%s: slave id %i: 0x%X\n", __func__, i, val);
+		/* set i2c slave ids and aliases */
+		for (i = 0; (i < ds90ub971->i2c_alias_num) && (i < NUM_ALIAS); i++) {
+			val = ds90ub971->i2c_slave[i];
+			if (val == 0) {
+				continue;
+			}
+			err = ds90ub9702_write_rx_port(priv, rx_port,
+										   TI9702_REG_SLAVE_ID0 + i,
+										   (val << TI9702_ALIAS_ID0));
+			if (unlikely(err))
+				goto ser_init_failed;
+			dev_info(dev, "%s: slave id %i: 0x%X\n", __func__, i, val);
 
-            val = ds90ub971->i2c_alias[i];
-            if (val == 0) {
-                continue;
-            }
-            err = ds90ub9702_write_rx_port(priv, rx_port,
-                                           TI9702_REG_ALIAS_ID0 + i,
-                                           (val << TI9702_ALIAS_ID0));
-            if (unlikely(err))
-                goto ser_init_failed;
-            dev_info(dev, "%s: alias id %i: 0x%X\n", __func__, i, val);
-        }
+			val = ds90ub971->i2c_alias[i];
+			if (val == 0) {
+				continue;
+			}
+			err = ds90ub9702_write_rx_port(priv, rx_port,
+										   TI9702_REG_ALIAS_ID0 + i,
+										   (val << TI9702_ALIAS_ID0));
+			if (unlikely(err))
+				goto ser_init_failed;
+			dev_info(dev, "%s: alias id %i: 0x%X\n", __func__, i, val);
+		}
 
-        /* set virtual channel id mappings */
-        err = ds90ub9702_write_rx_port(priv, rx_port,
-                                       TI9702_REG_VC_ID_MAP_0,
-                                       ds90ub971->vc_map0);                          //NEW
-        if (unlikely(err))
-            goto ser_init_failed;
+		/* set virtual channel id mappings */
+		err = ds90ub9702_write_rx_port(priv, rx_port,
+									   TI9702_REG_VC_ID_MAP_0,
+									   ds90ub971->vc_map0);                          //NEW
+		if (unlikely(err))
+			goto ser_init_failed;
 
-        err = ds90ub9702_write_rx_port(priv, rx_port,
-                                       TI9702_REG_VC_ID_MAP_1,                        //NEW
-                                       ds90ub971->vc_map1);                          //NEW
-        if (unlikely(err))
-            goto ser_init_failed;
+		err = ds90ub9702_write_rx_port(priv, rx_port,
+									   TI9702_REG_VC_ID_MAP_1,                        //NEW
+									   ds90ub971->vc_map1);                          //NEW
+		if (unlikely(err))
+			goto ser_init_failed;
 
-        else {
-            val = ds90ub971->vc_map0 & 0b1111;                              //NEW SET TO DEFAULT 0x10
-            dev_info(dev, "%s: VC-ID 0 mapped to %i\n", __func__, val);
-            val = ((ds90ub971->vc_map0 & 0b11110000) >> 4);                 //NEW SET TO DEFAULT 0x10
-            dev_info(dev, "%s: VC-ID 1 mapped to %i\n", __func__, val);
-            val = ds90ub971->vc_map1 & 0b1111;
-            dev_info(dev, "%s: VC-ID 2 mapped to %i\n", __func__, val);
-            val = ((ds90ub971->vc_map1 & 0b11110000) >> 4);
-            dev_info(dev, "%s: VC-ID 3 mapped to %i\n", __func__, val);
-        }
+		else {
+			val = ds90ub971->vc_map0 & 0b1111;                              //NEW SET TO DEFAULT 0x10
+			dev_info(dev, "%s: VC-ID 0 mapped to %i\n", __func__, val);
+			val = ((ds90ub971->vc_map0 & 0b11110000) >> 4);                 //NEW SET TO DEFAULT 0x10
+			dev_info(dev, "%s: VC-ID 1 mapped to %i\n", __func__, val);
+			val = ds90ub971->vc_map1 & 0b1111;
+			dev_info(dev, "%s: VC-ID 2 mapped to %i\n", __func__, val);
+			val = ((ds90ub971->vc_map1 & 0b11110000) >> 4);
+			dev_info(dev, "%s: VC-ID 3 mapped to %i\n", __func__, val);
+		}
 
 
-        /* all rx_port specific registers set for rx_port X */
-        dev_info(dev, "%s: init of deserializer rx_port %i successful\n",
-                 __func__, rx_port);
+		/* all rx_port specific registers set for rx_port X */
+		dev_info(dev, "%s: init of deserializer rx_port %i successful\n",
+				 __func__, rx_port);
 
-        err = ds90ub9702_read(priv, TI9702_REG_CSI_CTL, &pr_value);
-        dev_info(dev, "CSI_REG_value after initialization: %u\n", pr_value);
-        continue;
-        ser_init_failed:
-        dev_err(dev, "%s: init deserializer rx_port %i failed\n",
-                __func__, rx_port);
-        dev_err(dev, "%s: deserializer rx_port %i is deactivated\n",
-                __func__, rx_port);
+		err = ds90ub9702_read(priv, TI9702_REG_CSI_CTL, &pr_value);
+		dev_info(dev, "CSI_REG_value after initialization: %u\n", pr_value);
+		continue;
+		ser_init_failed:
+		dev_err(dev, "%s: init deserializer rx_port %i failed\n",
+				__func__, rx_port);
+		dev_err(dev, "%s: deserializer rx_port %i is deactivated\n",
+				__func__, rx_port);
 
-        ds90ub971->initialized = 0;
+		ds90ub971->initialized = 0;
 
-        /* DISABLE RX PORT */
-        err = ds90ub9702_read(priv, TI9702_REG_RX_PORT_CTL, &val);
-        if (err)
-            continue;
-        val &= (0xFF ^ (1 << (TI9702_PORT0_EN + rx_port)));
-        err = ds90ub9702_write(priv, TI9702_REG_RX_PORT_CTL, val);
-        if (err)
-            continue;
-        /* DISABLE CSI FORWARDING */
-        err = ds90ub9702_read(priv, TI9702_REG_FWD_CTL1, &val);
-        if (err)
-            continue;
-        val |= (1 << (TI9702_FWD_PORT0_DIS + rx_port));
-        err = ds90ub9702_write(priv, TI9702_REG_FWD_CTL1, val);
-        if (err)
-            continue;
-        continue;
-    }
+		/* DISABLE RX PORT */
+		err = ds90ub9702_read(priv, TI9702_REG_RX_PORT_CTL, &val);
+		if (err)
+			continue;
+		val &= (0xFF ^ (1 << (TI9702_PORT0_EN + rx_port)));
+		err = ds90ub9702_write(priv, TI9702_REG_RX_PORT_CTL, val);
+		if (err)
+			continue;
+		/* DISABLE CSI FORWARDING */
+		err = ds90ub9702_read(priv, TI9702_REG_FWD_CTL1, &val);
+		if (err)
+			continue;
+		val |= (1 << (TI9702_FWD_PORT0_DIS + rx_port));
+		err = ds90ub9702_write(priv, TI9702_REG_FWD_CTL1, val);
+		if (err)
+			continue;
+		continue;
+	}
 
-    /* setup gpio forwarding, default all input */
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO_INPUT_CTL,
-                           (priv->gpio7_oe << TI9702_GPIO7_INPUT_EN) |
-                           (priv->gpio6_oe << TI9702_GPIO6_INPUT_EN) |
-                           (priv->gpio5_oe << TI9702_GPIO5_INPUT_EN) |
-                           (priv->gpio4_oe << TI9702_GPIO4_INPUT_EN) |
-                           (priv->gpio3_oe << TI9702_GPIO3_INPUT_EN) |
-                           (priv->gpio2_oe << TI9702_GPIO2_INPUT_EN) |
-                           (priv->gpio1_oe << TI9702_GPIO1_INPUT_EN) |
-                           (priv->gpio0_oe << TI9702_GPIO0_INPUT_EN));
-    if (err)
-        goto init_err;
+	/* setup gpio forwarding, default all input */
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO_INPUT_CTL,
+						   (priv->gpio7_oe << TI9702_GPIO7_INPUT_EN) |
+						   (priv->gpio6_oe << TI9702_GPIO6_INPUT_EN) |
+						   (priv->gpio5_oe << TI9702_GPIO5_INPUT_EN) |
+						   (priv->gpio4_oe << TI9702_GPIO4_INPUT_EN) |
+						   (priv->gpio3_oe << TI9702_GPIO3_INPUT_EN) |
+						   (priv->gpio2_oe << TI9702_GPIO2_INPUT_EN) |
+						   (priv->gpio1_oe << TI9702_GPIO1_INPUT_EN) |
+						   (priv->gpio0_oe << TI9702_GPIO0_INPUT_EN));
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO0_PIN_CTL, priv->gpio0_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO0_PIN_CTL, priv->gpio0_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO1_PIN_CTL, priv->gpio1_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO1_PIN_CTL, priv->gpio1_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO2_PIN_CTL, priv->gpio2_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO2_PIN_CTL, priv->gpio2_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO3_PIN_CTL, priv->gpio3_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO3_PIN_CTL, priv->gpio3_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO4_PIN_CTL, priv->gpio4_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO4_PIN_CTL, priv->gpio4_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO5_PIN_CTL, priv->gpio5_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO5_PIN_CTL, priv->gpio5_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO6_PIN_CTL, priv->gpio6_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO6_PIN_CTL, priv->gpio6_oe);
+	if (err)
+		goto init_err;
 
-    err = ds90ub9702_write(priv, TI9702_REG_GPIO7_PIN_CTL, priv->gpio7_oe);
-    if (err)
-        goto init_err;
+	err = ds90ub9702_write(priv, TI9702_REG_GPIO7_PIN_CTL, priv->gpio7_oe);
+	if (err)
+		goto init_err;
 
-    init_err:
-    return err;
+	init_err:
+	return err;
 }
 
 static int ds90ub9702_init_gpio(const struct ds90ub9702_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    int err = 0;
+	struct device *dev = &priv->client->dev;
+	int err = 0;
 
-    if (gpio_is_valid(priv->pass_gpio)) {
-        err = gpio_request(priv->pass_gpio, "ds90ub9702_pass_gpio");
-        if (unlikely(err < 0)) {
-            dev_err(dev, "unable to request pass_gpio (%d)\n", err);
-            goto done;
-        }
-        err = gpio_direction_input(priv->pass_gpio);
-        if (unlikely(err < 0)) {
-            dev_err(dev, "unable to configure pass_gpio as input (%d)\n", err);
-            goto done;
-        }
-    }
+	if (gpio_is_valid(priv->pass_gpio)) {
+		err = gpio_request(priv->pass_gpio, "ds90ub9702_pass_gpio");
+		if (unlikely(err < 0)) {
+			dev_err(dev, "unable to request pass_gpio (%d)\n", err);
+			goto done;
+		}
+		err = gpio_direction_input(priv->pass_gpio);
+		if (unlikely(err < 0)) {
+			dev_err(dev, "unable to configure pass_gpio as input (%d)\n", err);
+			goto done;
+		}
+	}
 
-    if (gpio_is_valid(priv->lock_gpio)) {
-        err = gpio_request(priv->lock_gpio, "ds90ub9702_lock_gpio");
-        if (unlikely(err < 0)) {
-            dev_err(dev, "unable to request lock_gpio (%d)\n", err);
-            goto done;
-        }
-        err = gpio_direction_input(priv->lock_gpio);
-        if (unlikely(err < 0)) {
-            dev_err(dev, "unable to configure lock_gpio as input (%d)\n", err);
-            goto done;
-        }
-    }
+	if (gpio_is_valid(priv->lock_gpio)) {
+		err = gpio_request(priv->lock_gpio, "ds90ub9702_lock_gpio");
+		if (unlikely(err < 0)) {
+			dev_err(dev, "unable to request lock_gpio (%d)\n", err);
+			goto done;
+		}
+		err = gpio_direction_input(priv->lock_gpio);
+		if (unlikely(err < 0)) {
+			dev_err(dev, "unable to configure lock_gpio as input (%d)\n", err);
+			goto done;
+		}
+	}
 
-    if (gpio_is_valid(priv->pdb_gpio)) {
-        err = gpio_request(priv->pdb_gpio, "ds90ub9702_pdb_gpio");
-        if (unlikely(err < 0)) {
-            dev_err(dev, "unable to request pdb_gpio (%d)\n", err);
-            goto done;
-        }
-        err = gpio_direction_output(priv->pdb_gpio, 0);
-        if (unlikely(err < 0)) {
-            dev_err(dev, "unable to configure pdb_gpio as output (%d)\n", err);
-            goto done;
-        }
-    }
+	if (gpio_is_valid(priv->pdb_gpio)) {
+		err = gpio_request(priv->pdb_gpio, "ds90ub9702_pdb_gpio");
+		if (unlikely(err < 0)) {
+			dev_err(dev, "unable to request pdb_gpio (%d)\n", err);
+			goto done;
+		}
+		err = gpio_direction_output(priv->pdb_gpio, 0);
+		if (unlikely(err < 0)) {
+			dev_err(dev, "unable to configure pdb_gpio as output (%d)\n", err);
+			goto done;
+		}
+	}
 
-    done:
-    return err;
+	done:
+	return err;
 }
 
 static void ds90ub9702_free_gpio(const struct ds90ub9702_priv *priv) {
 
-    if (priv->pass_gpio >= 0) {
-        gpio_free(priv->pass_gpio);
-    }
-    if (priv->lock_gpio >= 0) {
-        gpio_free(priv->lock_gpio);
-    }
-    if (priv->pdb_gpio >= 0) {
-        gpio_free(priv->pdb_gpio);
-    }
+	if (priv->pass_gpio >= 0) {
+		gpio_free(priv->pass_gpio);
+	}
+	if (priv->lock_gpio >= 0) {
+		gpio_free(priv->lock_gpio);
+	}
+	if (priv->pdb_gpio >= 0) {
+		gpio_free(priv->pdb_gpio);
+	}
 }
 
 static void ds90ub9702_pwr_enable(const struct ds90ub9702_priv *priv) {
-    if (priv->pdb_gpio >= 0) {
-        gpio_set_value_cansleep(priv->pdb_gpio, 1);
-    }
+	if (priv->pdb_gpio >= 0) {
+		gpio_set_value_cansleep(priv->pdb_gpio, 1);
+	}
 }
 
 static void ds90ub9702_pwr_disable(const struct ds90ub9702_priv *priv) {
-    if (priv->pdb_gpio >= 0) {
-        gpio_set_value_cansleep(priv->pdb_gpio, 0);
-    }
+	if (priv->pdb_gpio >= 0) {
+		gpio_set_value_cansleep(priv->pdb_gpio, 0);
+	}
 }
 
 static int ds90ub9702_parse_dt(struct ds90ub9702_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    struct device_node *np = dev->of_node;
-    const struct of_device_id *match;
-    int gpio;
-    int err = 0;
-    int val = 0;
+	struct device *dev = &priv->client->dev;
+	struct device_node *np = dev->of_node;
+	const struct of_device_id *match;
+	int gpio;
+	int err = 0;
+	int val = 0;
 
-    if (!np)
-        return -ENODEV;
+	if (!np)
+		return -ENODEV;
 
-    dev_info(dev, "%s: deserializer:\n", __func__);
-    match = of_match_device(ds90ub9702_of_match, dev);
-    if (!match) {
-        dev_err(dev, "Failed to find matching dt id\n");
-        return -ENODEV;
-    }
+	dev_info(dev, "%s: deserializer:\n", __func__);
+	match = of_match_device(ds90ub9702_of_match, dev);
+	if (!match) {
+		dev_err(dev, "Failed to find matching dt id\n");
+		return -ENODEV;
+	}
 
-    gpio = of_get_named_gpio(np, "pass-gpio", 0);
-    if (gpio < 0) {
-        if (gpio == -EPROBE_DEFER) {
-            err = gpio;
-            dev_err(dev, "pass-gpio read failed: (%d)\n", err);
-            return err;
-        }
-        dev_info(dev, "pass-gpio not found, ignoring\n");
-    }
-    priv->pass_gpio = gpio;
+	gpio = of_get_named_gpio(np, "pass-gpio", 0);
+	if (gpio < 0) {
+		if (gpio == -EPROBE_DEFER) {
+			err = gpio;
+			dev_err(dev, "pass-gpio read failed: (%d)\n", err);
+			return err;
+		}
+		dev_info(dev, "pass-gpio not found, ignoring\n");
+	}
+	priv->pass_gpio = gpio;
 
-    gpio = of_get_named_gpio(np, "lock-gpio", 0);
-    if (gpio < 0) {
-        if (gpio == -EPROBE_DEFER) {
-            err = gpio;
-            dev_err(dev, "lock-gpio read failed: (%d)\n", err);
-            return err;
-        }
-        dev_info(dev, "lock-gpio not found, ignoring\n");
-    }
-    priv->lock_gpio = gpio;
+	gpio = of_get_named_gpio(np, "lock-gpio", 0);
+	if (gpio < 0) {
+		if (gpio == -EPROBE_DEFER) {
+			err = gpio;
+			dev_err(dev, "lock-gpio read failed: (%d)\n", err);
+			return err;
+		}
+		dev_info(dev, "lock-gpio not found, ignoring\n");
+	}
+	priv->lock_gpio = gpio;
 
-    gpio = of_get_named_gpio(np, "pdb-gpio", 0);
-    if (gpio < 0) {
-        if (gpio == -EPROBE_DEFER) {
-            err = gpio;
-            dev_err(dev, "pdb-gpio read failed: (%d)\n", err);
-            return err;
-        }
-        dev_info(dev, "pdb-gpio not found, ignoring\n");
-    }
-    priv->pdb_gpio = gpio;
+	gpio = of_get_named_gpio(np, "pdb-gpio", 0);
+	if (gpio < 0) {
+		if (gpio == -EPROBE_DEFER) {
+			err = gpio;
+			dev_err(dev, "pdb-gpio read failed: (%d)\n", err);
+			return err;
+		}
+		dev_info(dev, "pdb-gpio not found, ignoring\n");
+	}
+	priv->pdb_gpio = gpio;
 
-    err = of_property_read_u32(np, "csi-lane-count", &val);
-    if (err) {
-        dev_info(dev, "%s: - csi-lane-count property not found\n", __func__);
+	err = of_property_read_u32(np, "csi-lane-count", &val);
+	if (err) {
+		dev_info(dev, "%s: - csi-lane-count property not found\n", __func__);
 
-        /* default value: 4 */
-        priv->csi_lane_count = 4;
-        dev_info(dev, "%s: - csi-lane-count set to default val: 4\n", __func__);
-    } else {
-        /* set csi-lane-count*/
-        priv->csi_lane_count = val;
-        dev_info(dev, "%s: - csi-lane-count %i\n", __func__, val);
-    }
+		/* default value: 4 */
+		priv->csi_lane_count = 4;
+		dev_info(dev, "%s: - csi-lane-count set to default val: 4\n", __func__);
+	} else {
+		/* set csi-lane-count*/
+		priv->csi_lane_count = val;
+		dev_info(dev, "%s: - csi-lane-count %i\n", __func__, val);
+	}
 
-    err = of_property_read_u32(np, "csi-lane-speed", &val);
-    if (err) {
-        dev_info(dev, "%s: - csi-lane-speed property not found\n", __func__);
+	err = of_property_read_u32(np, "csi-lane-speed", &val);
+	if (err) {
+		dev_info(dev, "%s: - csi-lane-speed property not found\n", __func__);
 
-        /* default value: 0 */
-        priv->csi_lane_speed = 1600;
-        dev_info(dev, "%s: - csi-lane-speed set to default val: 0\n", __func__);
-    } else {
-        /* set csi-lane-speed*/
-        priv->csi_lane_speed = val;
-        dev_info(dev, "%s: - csi-lane-speed %i\n", __func__, val);
-    }
-    //priv->csi_lane_speed = 2500;
-    //dev_info(dev, "%s: - csi-lane-speed always 2500 for testing.\n", __func__);
+		/* default value: 0 */
+		priv->csi_lane_speed = 1600;
+		dev_info(dev, "%s: - csi-lane-speed set to default val: 0\n", __func__);
+	} else {
+		/* set csi-lane-speed*/
+		priv->csi_lane_speed = val;
+		dev_info(dev, "%s: - csi-lane-speed %i\n", __func__, val);
+	}
+	//priv->csi_lane_speed = 2500;
+	//dev_info(dev, "%s: - csi-lane-speed always 2500 for testing.\n", __func__);
 
-    if (of_property_read_bool(np, "test-pattern")) {
-        dev_info(dev, "%s: - test-pattern enabled\n", __func__);
-        priv->test_pattern = 1;
-    } else {
-        /* default value: 0 */
-        priv->test_pattern = 0;
-        dev_info(dev, "%s: - test-pattern disabled\n", __func__);
-    }
+	if (of_property_read_bool(np, "test-pattern")) {
+		dev_info(dev, "%s: - test-pattern enabled\n", __func__);
+		priv->test_pattern = 1;
+	} else {
+		/* default value: 0 */
+		priv->test_pattern = 0;
+		dev_info(dev, "%s: - test-pattern disabled\n", __func__);
+	}
 
-    if (of_property_read_bool(np, "continuous-clock")) {
-        dev_info(dev, "%s: - continuous clock enabled\n", __func__);
-        priv->conts_clk = 1;
-    } else {
-        /* default value: 0 */
-        priv->conts_clk = 0;
-        dev_info(dev, "%s: - discontinuous clock used\n", __func__);
-    }
+	if (of_property_read_bool(np, "continuous-clock")) {
+		dev_info(dev, "%s: - continuous clock enabled\n", __func__);
+		priv->conts_clk = 1;
+	} else {
+		/* default value: 0 */
+		priv->conts_clk = 0;
+		dev_info(dev, "%s: - discontinuous clock used\n", __func__);
+	}
 
-    /*   NEW   */
-    if (of_property_read_bool(np, "repl-switch")) {
-        dev_info(dev, "%s: - repl-switch CSI port1 is replicated to CSI port2\n", __func__);
-        priv->repl_switch = 1;
-    } else {
-        /* default value: 0 */
-        priv->repl_switch = 0;
-        dev_info(dev, "%s: - repl-switch off CSI port0 is replicated to CSI port2 (default setting)\n", __func__);
-    }
+	/*   NEW   */
+	if (of_property_read_bool(np, "repl-switch")) {
+		dev_info(dev, "%s: - repl-switch CSI port1 is replicated to CSI port2\n", __func__);
+		priv->repl_switch = 1;
+	} else {
+		/* default value: 0 */
+		priv->repl_switch = 0;
+		dev_info(dev, "%s: - repl-switch off CSI port0 is replicated to CSI port2 (default setting)\n", __func__);
+	}
 
-    if (of_property_read_bool(np, "do-replicate")) {
-        dev_info(dev, "%s: - do-replicate\n", __func__);
-        priv->replicate = 1;
-    } else {
-        /* default value: 0 */
-        priv->replicate = 0;
-        dev_info(dev, "%s: - do-replicate disabled\n", __func__);
-    }
+	if (of_property_read_bool(np, "do-replicate")) {
+		dev_info(dev, "%s: - do-replicate\n", __func__);
+		priv->replicate = 1;
+	} else {
+		/* default value: 0 */
+		priv->replicate = 0;
+		dev_info(dev, "%s: - do-replicate disabled\n", __func__);
+	}
 
-    if (of_property_read_bool(np, "write-tx0")) {
-        dev_info(dev, "%s: - write-tx0\n", __func__);
-        priv->write_tx0 = 1;
-    } else {
-        /* default value: 0 */
-        priv->write_tx0 = 0;
-        dev_info(dev, "%s: - write-tx0 disabled\n", __func__);
-    }
-    priv->write_tx0 = 1;
-    dev_info(dev, "%s: - write-tx0 always on for testing.\n", __func__);
-    /* if(of_property_read_bool(np, "write-tx1")) {
-        dev_info(dev, "%s: - write-tx1\n", __func__);
-        priv->write_tx1 = 1;
-    } else {
-        // default value: 0
-        priv->write_tx1 = 0;
-        dev_info(dev, "%s: - write-tx1 disabled\n", __func__);
-    } */
-    /*  NEW    */
-
-
-    /* GPIO output enable */
-    err = of_property_read_u32(np, "des-gpio0-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio0-output-enable property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio0_oe = 0;
-        dev_info(dev, "%s: des-gpio0-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio0-output-enable*/
-        priv->gpio0_oe = val;
-        dev_info(dev, "%s: - des-gpio0-output-enable %i\n",
-                 __func__, val);
-    }
-
-    err = of_property_read_u32(np, "des-gpio1-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio1-output-enable property not found\n",
-                 __func__);
-
-        /* default value: 0 */
-        priv->gpio1_oe = 0;
-        dev_info(dev, "%s: des-gpio1-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio1-output-enable*/
-        priv->gpio1_oe = val;
-        dev_info(dev, "%s: - des-gpio1-output-enable %i\n",
-                 __func__, val);
-    }
-
-    err = of_property_read_u32(np, "des-gpio2-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio2-output-enable property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio2_oe = 0;
-        dev_info(dev, "%s: des-gpio2-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio2-output-enable*/
-        priv->gpio2_oe = val;
-        dev_info(dev, "%s: - des-gpio2-output-enable %i\n", __func__,
-                 val);
-    }
-
-    err = of_property_read_u32(np, "gpio3-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio3-output-enable property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio3_oe = 0;
-        dev_info(dev, "%s: des-gpio3-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio3-output-enable*/
-        priv->gpio3_oe = val;
-        dev_info(dev, "%s: - des-gpio3-output-enable %i\n",
-                 __func__, val);
-    }
-
-    err = of_property_read_u32(np, "des-gpio4-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio4-output-enable property not found\n",
-                 __func__);
-
-        /* default value: 0 */
-        priv->gpio4_oe = 0;
-        dev_info(dev, "%s: des-gpio4-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio4-output-enable*/
-        priv->gpio4_oe = val;
-        dev_info(dev, "%s: - des-gpio4-output-enable %i\n",
-                 __func__, val);
-    }
-
-    err = of_property_read_u32(np, "des-gpio5-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio5-output-enable property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio5_oe = 0;
-        dev_info(dev, "%s: des-gpio5-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio5-output-enable*/
-        priv->gpio5_oe = val;
-        dev_info(dev, "%s: - des-gpio5-output-enable %i\n", __func__,
-                 val);
-    }
-
-    err = of_property_read_u32(np, "gpio6-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio6-output-enable property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio6_oe = 0;
-        dev_info(dev, "%s: des-gpio6-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio6-output-enable*/
-        priv->gpio6_oe = val;
-        dev_info(dev, "%s: - des-gpio6-output-enable %i\n",
-                 __func__, val);
-    }
-
-    err = of_property_read_u32(np, "gpio7-output-enable", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio7-output-enable property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio7_oe = 0;
-        dev_info(dev, "%s: des-gpio7-output-enable to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio7-output-enable*/
-        priv->gpio7_oe = val;
-        dev_info(dev, "%s: - des-gpio7-output-enable %i\n",
-                 __func__, val);
-    }
+	if (of_property_read_bool(np, "write-tx0")) {
+		dev_info(dev, "%s: - write-tx0\n", __func__);
+		priv->write_tx0 = 1;
+	} else {
+		/* default value: 0 */
+		priv->write_tx0 = 0;
+		dev_info(dev, "%s: - write-tx0 disabled\n", __func__);
+	}
+	priv->write_tx0 = 1;
+	dev_info(dev, "%s: - write-tx0 always on for testing.\n", __func__);
+	/* if(of_property_read_bool(np, "write-tx1")) {
+		dev_info(dev, "%s: - write-tx1\n", __func__);
+		priv->write_tx1 = 1;
+	} else {
+		// default value: 0
+		priv->write_tx1 = 0;
+		dev_info(dev, "%s: - write-tx1 disabled\n", __func__);
+	} */
+	/*  NEW    */
 
 
-    /* GPIO output control */
-    err = of_property_read_u32(np, "des-gpio0-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio0-control property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio0_oc = 0;
-        dev_info(dev, "%s: des-gpio0-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio0-control*/
-        priv->gpio0_oc = val;
-        dev_info(dev, "%s: - des-gpio0-control %i\n",
-                 __func__, val);
-    }
+	/* GPIO output enable */
+	err = of_property_read_u32(np, "des-gpio0-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio0-output-enable property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio0_oe = 0;
+		dev_info(dev, "%s: des-gpio0-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio0-output-enable*/
+		priv->gpio0_oe = val;
+		dev_info(dev, "%s: - des-gpio0-output-enable %i\n",
+				 __func__, val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio1-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio1-control property not found\n",
-                 __func__);
+	err = of_property_read_u32(np, "des-gpio1-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio1-output-enable property not found\n",
+				 __func__);
 
-        /* default value: 0 */
-        priv->gpio1_oc = 0;
-        dev_info(dev, "%s: des-gpio1-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio1-control*/
-        priv->gpio1_oc = val;
-        dev_info(dev, "%s: - des-gpio1-control %i\n",
-                 __func__, val);
-    }
+		/* default value: 0 */
+		priv->gpio1_oe = 0;
+		dev_info(dev, "%s: des-gpio1-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio1-output-enable*/
+		priv->gpio1_oe = val;
+		dev_info(dev, "%s: - des-gpio1-output-enable %i\n",
+				 __func__, val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio2-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio2-control property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio2_oc = 0;
-        dev_info(dev, "%s: des-gpio2-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio2-control*/
-        priv->gpio2_oc = val;
-        dev_info(dev, "%s: - des-gpio2-control %i\n",
-                 __func__, val);
-    }
+	err = of_property_read_u32(np, "des-gpio2-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio2-output-enable property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio2_oe = 0;
+		dev_info(dev, "%s: des-gpio2-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio2-output-enable*/
+		priv->gpio2_oe = val;
+		dev_info(dev, "%s: - des-gpio2-output-enable %i\n", __func__,
+				 val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio3-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio3-control property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio3_oc = 0;
-        dev_info(dev, "%s: des-gpio3-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio3-control*/
-        priv->gpio3_oc = val;
-        dev_info(dev, "%s: - des-gpio3-control %i\n",
-                 __func__, val);
-    }
+	err = of_property_read_u32(np, "gpio3-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio3-output-enable property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio3_oe = 0;
+		dev_info(dev, "%s: des-gpio3-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio3-output-enable*/
+		priv->gpio3_oe = val;
+		dev_info(dev, "%s: - des-gpio3-output-enable %i\n",
+				 __func__, val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio4-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio4-control property not found\n",
-                 __func__);
+	err = of_property_read_u32(np, "des-gpio4-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio4-output-enable property not found\n",
+				 __func__);
 
-        /* default value: 0 */
-        priv->gpio4_oc = 0;
-        dev_info(dev, "%s: des-gpio4-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio4-control*/
-        priv->gpio4_oc = val;
-        dev_info(dev, "%s: - des-gpio4-control %i\n",
-                 __func__, val);
-    }
+		/* default value: 0 */
+		priv->gpio4_oe = 0;
+		dev_info(dev, "%s: des-gpio4-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio4-output-enable*/
+		priv->gpio4_oe = val;
+		dev_info(dev, "%s: - des-gpio4-output-enable %i\n",
+				 __func__, val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio5-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio5-control property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio5_oc = 0;
-        dev_info(dev, "%s: des-gpio5-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio5-control*/
-        priv->gpio5_oc = val;
-        dev_info(dev, "%s: - des-gpio5-control %i\n",
-                 __func__, val);
-    }
+	err = of_property_read_u32(np, "des-gpio5-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio5-output-enable property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio5_oe = 0;
+		dev_info(dev, "%s: des-gpio5-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio5-output-enable*/
+		priv->gpio5_oe = val;
+		dev_info(dev, "%s: - des-gpio5-output-enable %i\n", __func__,
+				 val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio6-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio6-control property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio6_oc = 0;
-        dev_info(dev, "%s: des-gpio6-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio6-control*/
-        priv->gpio6_oc = val;
-        dev_info(dev, "%s: - des-gpio6-control %i\n",
-                 __func__, val);
-    }
+	err = of_property_read_u32(np, "gpio6-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio6-output-enable property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio6_oe = 0;
+		dev_info(dev, "%s: des-gpio6-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio6-output-enable*/
+		priv->gpio6_oe = val;
+		dev_info(dev, "%s: - des-gpio6-output-enable %i\n",
+				 __func__, val);
+	}
 
-    err = of_property_read_u32(np, "des-gpio7-control", &val);
-    if (err) {
-        dev_info(dev, "%s: - des-gpio7-control property not found\n",
-                 __func__);
-        /* default value: 0 */
-        priv->gpio7_oc = 0;
-        dev_info(dev, "%s: des-gpio7-control to default val: 0\n",
-                 __func__);
-    } else {
-        /* set gpio7-control*/
-        priv->gpio7_oc = val;
-        dev_info(dev, "%s: - des-gpio7-control %i\n",
-                 __func__, val);
-    }
+	err = of_property_read_u32(np, "gpio7-output-enable", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio7-output-enable property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio7_oe = 0;
+		dev_info(dev, "%s: des-gpio7-output-enable to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio7-output-enable*/
+		priv->gpio7_oe = val;
+		dev_info(dev, "%s: - des-gpio7-output-enable %i\n",
+				 __func__, val);
+	}
 
-    return 0;
+
+	/* GPIO output control */
+	err = of_property_read_u32(np, "des-gpio0-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio0-control property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio0_oc = 0;
+		dev_info(dev, "%s: des-gpio0-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio0-control*/
+		priv->gpio0_oc = val;
+		dev_info(dev, "%s: - des-gpio0-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio1-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio1-control property not found\n",
+				 __func__);
+
+		/* default value: 0 */
+		priv->gpio1_oc = 0;
+		dev_info(dev, "%s: des-gpio1-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio1-control*/
+		priv->gpio1_oc = val;
+		dev_info(dev, "%s: - des-gpio1-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio2-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio2-control property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio2_oc = 0;
+		dev_info(dev, "%s: des-gpio2-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio2-control*/
+		priv->gpio2_oc = val;
+		dev_info(dev, "%s: - des-gpio2-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio3-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio3-control property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio3_oc = 0;
+		dev_info(dev, "%s: des-gpio3-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio3-control*/
+		priv->gpio3_oc = val;
+		dev_info(dev, "%s: - des-gpio3-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio4-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio4-control property not found\n",
+				 __func__);
+
+		/* default value: 0 */
+		priv->gpio4_oc = 0;
+		dev_info(dev, "%s: des-gpio4-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio4-control*/
+		priv->gpio4_oc = val;
+		dev_info(dev, "%s: - des-gpio4-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio5-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio5-control property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio5_oc = 0;
+		dev_info(dev, "%s: des-gpio5-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio5-control*/
+		priv->gpio5_oc = val;
+		dev_info(dev, "%s: - des-gpio5-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio6-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio6-control property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio6_oc = 0;
+		dev_info(dev, "%s: des-gpio6-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio6-control*/
+		priv->gpio6_oc = val;
+		dev_info(dev, "%s: - des-gpio6-control %i\n",
+				 __func__, val);
+	}
+
+	err = of_property_read_u32(np, "des-gpio7-control", &val);
+	if (err) {
+		dev_info(dev, "%s: - des-gpio7-control property not found\n",
+				 __func__);
+		/* default value: 0 */
+		priv->gpio7_oc = 0;
+		dev_info(dev, "%s: des-gpio7-control to default val: 0\n",
+				 __func__);
+	} else {
+		/* set gpio7-control*/
+		priv->gpio7_oc = val;
+		dev_info(dev, "%s: - des-gpio7-control %i\n",
+				 __func__, val);
+	}
+
+	return 0;
 
 }
 
 #ifdef ENABLE_SYSFS_TP
 
 static ssize_t test_pattern_show_des(struct device *dev,
-                                     struct device_attribute *attr,
-                                     char *buf) {
-    struct ds90ub9702_priv *priv;
-    priv = dev_get_drvdata(dev);
-    return snprintf(buf, PAGE_SIZE,
-                    "Test Pattern is set to: %i\n", priv->test_pattern);
+									 struct device_attribute *attr,
+									 char *buf) {
+	struct ds90ub9702_priv *priv;
+	priv = dev_get_drvdata(dev);
+	return snprintf(buf, PAGE_SIZE,
+					"Test Pattern is set to: %i\n", priv->test_pattern);
 }
 
 static ssize_t test_pattern_set_des(struct device *dev,
-                                    struct device_attribute *attr,
-                                    const char *buf, size_t count) {
-    struct ds90ub9702_priv *priv;
-    int testpat;
+									struct device_attribute *attr,
+									const char *buf, size_t count) {
+	struct ds90ub9702_priv *priv;
+	int testpat;
 
-    priv = dev_get_drvdata(dev);
-    sscanf(buf, "%d", &testpat);
-    if (testpat > 1 || testpat < 0) {
-        dev_info(dev,
-                 "Invalid value: %i for test pattern (0/1)\n", testpat);
-        return PAGE_SIZE;
-    }
-    if (testpat == 1) {
-        dev_info(dev, "enabling testpattern for deserializer\n");
-        priv->test_pattern = 1;
-        ds90ub9702_init_testpattern(priv);
-    } else {
-        dev_info(dev, "disabling testpattern for deserializer\n");
-        ds90ub9702_disable_testpattern(priv);
-    }
-    return PAGE_SIZE;
+	priv = dev_get_drvdata(dev);
+	sscanf(buf, "%d", &testpat);
+	if (testpat > 1 || testpat < 0) {
+		dev_info(dev,
+				 "Invalid value: %i for test pattern (0/1)\n", testpat);
+		return PAGE_SIZE;
+	}
+	if (testpat == 1) {
+		dev_info(dev, "enabling testpattern for deserializer\n");
+		priv->test_pattern = 1;
+		ds90ub9702_init_testpattern(priv);
+	} else {
+		dev_info(dev, "disabling testpattern for deserializer\n");
+		ds90ub9702_disable_testpattern(priv);
+	}
+	return PAGE_SIZE;
 }
 
 static DEVICE_ATTR(test_pattern_des,
@@ -1340,97 +1371,97 @@ test_pattern_set_des);
  *----------------------------------------------------------------------------*/
 
 static int ds90ub971_read(struct ds90ub971_priv *priv, unsigned int reg,
-                          unsigned int *val) {
-    int err;
-    err = regmap_read(priv->regmap, reg, val);
-    if (err) {
-        dev_err(&priv->client->dev,
-                "Cannot read subdev 0x%02x register 0x%02x (%d)!\n",
-                priv->client->addr, reg, err);
-    }
-    return err;
+						  unsigned int *val) {
+	int err;
+	err = regmap_read(priv->regmap, reg, val);
+	if (err) {
+		dev_err(&priv->client->dev,
+				"Cannot read subdev 0x%02x register 0x%02x (%d)!\n",
+				priv->client->addr, reg, err);
+	}
+	return err;
 }
 
 static int ds90ub971_write(const struct ds90ub971_priv *priv, unsigned int reg,
-                           unsigned int val) {
-    int err;
-    err = regmap_write(priv->regmap, reg, val);
-    if (err) {
-        dev_err(&priv->parent->client->dev,
-                "Cannot write subdev 0x%02x register 0x%02x (%d)!\n",
-                priv->client->addr, reg, err);
-    }
-    return err;
+						   unsigned int val) {
+	int err;
+	err = regmap_write(priv->regmap, reg, val);
+	if (err) {
+		dev_err(&priv->parent->client->dev,
+				"Cannot write subdev 0x%02x register 0x%02x (%d)!\n",
+				priv->client->addr, reg, err);
+	}
+	return err;
 }
 
 static int ds90ub971_disable_testpattern(struct ds90ub971_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    int err = 0;
-    /* Indirect Pattern Gen Registers */
-    err = ds90ub971_write(priv, 0xB0, 0x00);
-    if (err)
-        goto init_err;
-    err = ds90ub971_write(priv, 0xB1, TI9702_REG_IA_PGEN_CTL);
-    if (err)
-        goto init_err;
-    err = ds90ub971_write(priv, 0xB2, (0 << TI9702_PGEN_ENABLE));
-    if (err)
-        goto init_err;
-    init_err:
-    dev_info(dev, "%s: disable test pattern failed\n", __func__);
-    return err;
+	struct device *dev = &priv->client->dev;
+	int err = 0;
+	/* Indirect Pattern Gen Registers */
+	err = ds90ub971_write(priv, 0xB0, 0x00);
+	if (err)
+		goto init_err;
+	err = ds90ub971_write(priv, 0xB1, TI9702_REG_IA_PGEN_CTL);
+	if (err)
+		goto init_err;
+	err = ds90ub971_write(priv, 0xB2, (0 << TI9702_PGEN_ENABLE));
+	if (err)
+		goto init_err;
+	init_err:
+	dev_info(dev, "%s: disable test pattern failed\n", __func__);
+	return err;
 }
 
 static int ds90ub971_init_testpattern(struct ds90ub971_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    int err = 0;
-    int i;
-    for (i = 0; i < ARRAY_SIZE(ds90ub95x_tp_reg_val); i += 2) {
+	struct device *dev = &priv->client->dev;
+	int err = 0;
+	int i;
+	for (i = 0; i < ARRAY_SIZE(ds90ub95x_tp_reg_val); i += 2) {
 
-        err = ds90ub971_write(priv, ds90ub95x_tp_reg_val[i],
-                              ds90ub95x_tp_reg_val[i + 1]);
-        if (unlikely(err)) {
-            dev_info(dev, "%s: enable test pattern failed\n", __func__);
-            return err;
-        }
-    }
-    dev_info(dev, "%s: enable test pattern successful\n", __func__);
-    return err;
+		err = ds90ub971_write(priv, ds90ub95x_tp_reg_val[i],
+							  ds90ub95x_tp_reg_val[i + 1]);
+		if (unlikely(err)) {
+			dev_info(dev, "%s: enable test pattern failed\n", __func__);
+			return err;
+		}
+	}
+	dev_info(dev, "%s: enable test pattern successful\n", __func__);
+	return err;
 }
 
 #ifdef ENABLE_SYSFS_TP
 
 static ssize_t test_pattern_show_ser(struct device *dev,
-                                     struct device_attribute *attr, char *buf) {
-    struct ds90ub971_priv *priv;
-    priv = dev_get_drvdata(dev);
-    return snprintf(buf, PAGE_SIZE,
-                    "Test Pattern is set to: %i\n", priv->test_pattern);
+									 struct device_attribute *attr, char *buf) {
+	struct ds90ub971_priv *priv;
+	priv = dev_get_drvdata(dev);
+	return snprintf(buf, PAGE_SIZE,
+					"Test Pattern is set to: %i\n", priv->test_pattern);
 }
 
 static ssize_t test_pattern_set_ser(struct device *dev,
-                                    struct device_attribute *attr,
-                                    const char *buf, size_t count) {
-    struct ds90ub971_priv *priv;
-    int testpat;
+									struct device_attribute *attr,
+									const char *buf, size_t count) {
+	struct ds90ub971_priv *priv;
+	int testpat;
 
-    priv = dev_get_drvdata(dev);
+	priv = dev_get_drvdata(dev);
 
-    sscanf(buf, "%d", &testpat);
-    if (testpat > 1 || testpat < 0) {
-        dev_info(dev,
-                 "Invalid value: %i for test pattern (0/1)\n", testpat);
-        return PAGE_SIZE;
-    }
-    if (testpat == 1) {
-        dev_info(dev, "enabling testpattern for deserializer\n");
-        priv->test_pattern = 1;
-        ds90ub971_init_testpattern(priv);
-    } else {
-        dev_info(dev, "disabling testpattern for deserializer\n");
-        ds90ub971_disable_testpattern(priv);
-    }
-    return PAGE_SIZE;
+	sscanf(buf, "%d", &testpat);
+	if (testpat > 1 || testpat < 0) {
+		dev_info(dev,
+				 "Invalid value: %i for test pattern (0/1)\n", testpat);
+		return PAGE_SIZE;
+	}
+	if (testpat == 1) {
+		dev_info(dev, "enabling testpattern for deserializer\n");
+		priv->test_pattern = 1;
+		ds90ub971_init_testpattern(priv);
+	} else {
+		dev_info(dev, "disabling testpattern for deserializer\n");
+		ds90ub971_disable_testpattern(priv);
+	}
+	return PAGE_SIZE;
 }
 
 static DEVICE_ATTR(test_pattern_ser,
@@ -1440,663 +1471,673 @@ test_pattern_set_ser);
 #endif
 
 static int ds90ub971_init(struct ds90ub971_priv *priv) {
-    struct device *dev = &priv->client->dev;
-    int val, dev_id, i, val_2;
-    int err = 0;
-    char id_code[TI971_RX_ID_LENGTH + 1];
+	struct device *dev = &priv->client->dev;
+	int val, dev_id, i, val_2;
+	int err = 0;
+	char id_code[TI971_RX_ID_LENGTH + 1];
 
-    dev_info(dev, "%s: start\n", __func__);
+	dev_info(dev, "%s: start\n", __func__);
 
-    err = ds90ub971_read(priv, TI971_REG_I2C_DEV_ID, &val);
-    if (unlikely(err))
-        goto init_err;
+	err = ds90ub971_read(priv, TI971_REG_I2C_DEV_ID, &val);
+	if (unlikely(err))
+		goto init_err;
 
-    dev_id = (unsigned char) val;
+	dev_id = (unsigned char) val;
 
-    memset(id_code, 0, sizeof(id_code));
-    for (i = 0; i < TI971_RX_ID_LENGTH; i++) {
-        err = ds90ub971_read(priv, TI971_REG_FPD3_RX_ID0 + i, &val);
-        if (unlikely(err))
-            goto init_err;
-        id_code[i] = (char) val;
-    }
-    dev_info(dev, "%s: device ID: 0x%x, code:%s\n", __func__, dev_id, id_code);
+	memset(id_code, 0, sizeof(id_code));
+	for (i = 0; i < TI971_RX_ID_LENGTH; i++) {
+		err = ds90ub971_read(priv, TI971_REG_FPD3_RX_ID0 + i, &val);
+		if (unlikely(err))
+			goto init_err;
+		id_code[i] = (char) val;
+	}
+	dev_info(dev, "%s: device ID: 0x%x, code:%s\n", __func__, dev_id, id_code);
 
-    /* set to csi lanes */
-    switch (priv->csi_lane_count) {
-        case 1:
-            val = TI971_CSI_LANE_SEL1;
-            break;
-        case 2:
-            val = TI971_CSI_LANE_SEL2;
-            break;
-        default:
-            val = TI971_CSI_LANE_SEL4;
-            break;
-    }
-    err = ds90ub971_write(priv, TI971_REG_GENERAL_CFG,
-            /*(1<<TI971_I2C_STRAP_MODE) |*/                   //NEW
-                          (1 << TI971_CRC_TX_GEN_ENABLE) |
-                          (val << TI971_CSI_LANE_SEL) |
-                          (priv->conts_clk << TI971_CONTS_CLK));
-    if (unlikely(err))
-        goto init_err;
+	/* set to csi lanes */
+	switch (priv->csi_lane_count) {
+		case 1:
+			val = TI971_CSI_LANE_SEL1;
+			break;
+		case 2:
+			val = TI971_CSI_LANE_SEL2;
+			break;
+		default:
+			val = TI971_CSI_LANE_SEL4;
+			break;
+	}
+	err = ds90ub971_write(priv, TI971_REG_GENERAL_CFG,
+			/*(1<<TI971_I2C_STRAP_MODE) |*/                   //NEW
+						  (1 << TI971_CRC_TX_GEN_ENABLE) |
+						  (val << TI971_CSI_LANE_SEL) |
+						  (priv->conts_clk << TI971_CONTS_CLK));
+	if (unlikely(err))
+		goto init_err;
 
-    //Set GPIO0 as output
-    err = ds90ub971_write(priv, TI971_REG_GPIO_CTRL, 0x1E);
+	// Set Mode to FPD3
+	err = ds90ub9702_write(priv, TI971_REG_MODE_SEL, 1 << TI971_MODE_OV);
+	if (unlikely(err))
+		goto init_err;
+
+	err = ds90ub9702_write(priv TI971_REG_MODE_SEL, 1 << TI971_MODE);
+
+	if (unlikely(err))
+		goto init_err;
+
+	//Set GPIO0 as output
+	err = ds90ub971_write(priv, TI971_REG_GPIO_CTRL, 0x1E);
 
 	/* set clock output frequency */
 	err = ds90ub971_write(priv, TI971_REG_CLKOUT_CTRL0,
-			      /*(priv->hs_clk_div<<TI971_HS_CLK_DIV) |*/        //NEW
-			      (priv->div_m_val<<TI971_DIV_M_VAL));
-    if(unlikely(err))
-        goto init_err;
+				  /*(priv->hs_clk_div<<TI971_HS_CLK_DIV) |*/        //NEW
+				  (priv->div_m_val<<TI971_DIV_M_VAL));
+	if(unlikely(err))
+		goto init_err;
 
-    err = ds90ub971_write(priv, TI971_REG_CLKOUT_CTRL1,
-                          priv->div_n_val << TI971_DIV_N_VAL);
-    if (unlikely(err))
-        goto init_err;
-    /*  NEW  */
-    err = ds90ub971_write(priv, TI971_REG_DIV_OSC_SEL0,
-                          (priv->osc_switch << TI971_DIV_OSC_SWITCH_EN));
-    if (unlikely(err))
-        goto init_err;
+	err = ds90ub971_write(priv, TI971_REG_CLKOUT_CTRL1,
+						  priv->div_n_val << TI971_DIV_N_VAL);
+	if (unlikely(err))
+		goto init_err;
+	/*  NEW  */
+	err = ds90ub971_write(priv, TI971_REG_DIV_OSC_SEL0,
+						  (priv->osc_switch << TI971_DIV_OSC_SWITCH_EN));
+	if (unlikely(err))
+		goto init_err;
 
-    err = ds90ub971_write(priv, TI971_REG_DIV_OSC_SEL0,
-                          (priv->div_m_osc_val << TI971_DIV_M_OSC_VAL));
-    if (unlikely(err))
-        goto init_err;
+	err = ds90ub971_write(priv, TI971_REG_DIV_OSC_SEL0,
+						  (priv->div_m_osc_val << TI971_DIV_M_OSC_VAL));
+	if (unlikely(err))
+		goto init_err;
 
-    err = ds90ub971_write(priv, TI971_REG_DIV_OSC_SEL1,
-                          (priv->div_n_osc_val << TI971_DIV_N_OSC_VAL));
-    if (unlikely(err))
-        goto init_err;
-    /*   NEW   */
+	err = ds90ub971_write(priv, TI971_REG_DIV_OSC_SEL1,
+						  (priv->div_n_osc_val << TI971_DIV_N_OSC_VAL));
+	if (unlikely(err))
+		goto init_err;
+	/*   NEW   */
 
-    /* setup GPIOs to input/output */
-    val = 0;
-    if (priv->gpio0_oe)
-        val |= 0b00010000;          //output enable
-    else
-        val |= 0b00000001;          //input enable
+	/* setup GPIOs to input/output */
+	val = 0;
+	if (priv->gpio0_oe)
+		val |= 0b00010000;          //output enable
+	else
+		val |= 0b00000001;          //input enable
 
-    if (priv->gpio1_oe)
-        val |= 0b00100000;
-    else
-        val |= 0b00000010;
+	if (priv->gpio1_oe)
+		val |= 0b00100000;
+	else
+		val |= 0b00000010;
 
-    if (priv->gpio2_oe)
-        val |= 0b01000000;
-    else
-        val |= 0b00000100;
+	if (priv->gpio2_oe)
+		val |= 0b01000000;
+	else
+		val |= 0b00000100;
 
-    if (priv->gpio3_oe)
-        val |= 0b10000000;
-    else
-        val |= 0b00001000;
+	if (priv->gpio3_oe)
+		val |= 0b10000000;
+	else
+		val |= 0b00001000;
 
 
-    val_2 = 0;
-    if (priv->gpio0_oe)
-        val_2 |= 0b00010000;
+	val_2 = 0;
+	if (priv->gpio0_oe)
+		val_2 |= 0b00010000;
 
-    if (priv->gpio1_oe)
-        val_2 |= 0b00100000;
+	if (priv->gpio1_oe)
+		val_2 |= 0b00100000;
 
-    if (priv->gpio2_oe)
-        val_2 |= 0b01000000;
+	if (priv->gpio2_oe)
+		val_2 |= 0b01000000;
 
-    if (priv->gpio3_oe)
-        val_2 |= 0b10000000;
+	if (priv->gpio3_oe)
+		val_2 |= 0b10000000;
 
-    err = ds90ub971_write(priv, TI971_REG_GPIO_CTRL, val);
-    if (unlikely(err))
-        goto init_err;
+	err = ds90ub971_write(priv, TI971_REG_GPIO_CTRL, val);
+	if (unlikely(err))
+		goto init_err;
 
-    err = ds90ub971_write(priv, TI971_REG_LOCAL_GPIO_DATA,
-                          val_2);
-    if (unlikely(err))
-        goto init_err;
+	err = ds90ub971_write(priv, TI971_REG_LOCAL_GPIO_DATA,
+						  val_2);
+	if (unlikely(err))
+		goto init_err;
 
-    err = ds90ub971_write(priv, TI971_REG_BCC_CONFIG,
-                          (0x1 << TI971_I2C_PASS_THROUGH_ALL) |
-                          (0x1 << TI971_RX_PARITY_CHECKER_ENABLE));
-    if (unlikely(err))
-        goto init_err;
+	err = ds90ub971_write(priv, TI971_REG_BCC_CONFIG,
+						  (0x1 << TI971_I2C_PASS_THROUGH_ALL) |
+						  (0x1 << TI971_RX_PARITY_CHECKER_ENABLE));
+	if (unlikely(err))
+		goto init_err;
 
-    /* check if test pattern should be turned on*/
-    if (priv->test_pattern == 1) {
-        dev_info(dev, "%s: serializer rx_port %i init testpattern\n",
-                 __func__, priv->rx_channel);
-        err = ds90ub971_init_testpattern(priv);
-        if (unlikely(err))
-            dev_info(dev,
-                     "%s: serializer rx_port %i init testpattern failed\n",
-                     __func__, priv->rx_channel);
-    }
+	/* check if test pattern should be turned on*/
+	if (priv->test_pattern == 1) {
+		dev_info(dev, "%s: serializer rx_port %i init testpattern\n",
+				 __func__, priv->rx_channel);
+		err = ds90ub971_init_testpattern(priv);
+		if (unlikely(err))
+			dev_info(dev,
+					 "%s: serializer rx_port %i init testpattern failed\n",
+					 __func__, priv->rx_channel);
+	}
 
 #ifdef ENABLE_SYSFS_TP
-    /* device attribute on sysfs */
-    dev_set_drvdata(dev, priv);
-    err = device_create_file(dev, &dev_attr_test_pattern_ser);
-    if (unlikely(err < 0))
-        dev_err(dev, "serializer %i cant create device attribute %s\n",
-                priv->rx_channel, dev_attr_test_pattern_ser.attr.name);
+	/* device attribute on sysfs */
+	dev_set_drvdata(dev, priv);
+	err = device_create_file(dev, &dev_attr_test_pattern_ser);
+	if (unlikely(err < 0))
+		dev_err(dev, "serializer %i cant create device attribute %s\n",
+				priv->rx_channel, dev_attr_test_pattern_ser.attr.name);
 #endif
-    dev_info(dev, "%s: successful\n", __func__);
+	dev_info(dev, "%s: successful\n", __func__);
 
-    init_err:
-    return err;
+	init_err:
+	return err;
 }
 
 static void ds90ub971_free(struct ds90ub9702_priv *priv) {
-    int i;
-    for (i = 0; i < priv->num_ser; i++) {
-        if (priv->ser[i])
-            i2c_unregister_device(priv->ser[i]->client);
-    }
+	int i;
+	for (i = 0; i < priv->num_ser; i++) {
+		if (priv->ser[i])
+			i2c_unregister_device(priv->ser[i]->client);
+	}
 }
 
 static int ds90ub971_regmap_init(struct ds90ub9702_priv *priv, int ser_nr) {
-    struct regmap *new_regmap = NULL;
-    struct device *dev = &priv->client->dev;
-    int err = 0;
+	struct regmap *new_regmap = NULL;
+	struct device *dev = &priv->client->dev;
+	int err = 0;
 
-    /* setup now regmap */
-    new_regmap = devm_regmap_init_i2c(priv->ser[ser_nr]->client,
-                                      &ds90ub971_regmap_config);
-    if (IS_ERR_VALUE(priv->regmap)) {
-        err = PTR_ERR(priv->regmap);
-        dev_err(dev, "regmap init of subdevice failed (%d)\n", err);
-        return err;
-    }
-    dev_info(dev, "%s init regmap done\n", __func__);
+	/* setup now regmap */
+	new_regmap = devm_regmap_init_i2c(priv->ser[ser_nr]->client,
+									  &ds90ub971_regmap_config);
+	if (IS_ERR_VALUE(priv->regmap)) {
+		err = PTR_ERR(priv->regmap);
+		dev_err(dev, "regmap init of subdevice failed (%d)\n", err);
+		return err;
+	}
+	dev_info(dev, "%s init regmap done\n", __func__);
 
-    priv->ser[ser_nr]->regmap = new_regmap;
-    return err;
+	priv->ser[ser_nr]->regmap = new_regmap;
+	return err;
 }
 
 static int ds90ub971_alloc(struct ds90ub9702_priv *priv, int ser_nr) {
-    struct ds90ub971_priv *priv_ser;
-    struct device *dev = &priv->client->dev;
+	struct ds90ub971_priv *priv_ser;
+	struct device *dev = &priv->client->dev;
 
-    priv_ser = devm_kzalloc(dev, sizeof(struct ds90ub971_priv), GFP_KERNEL);
-    if (!priv)
-        return -ENOMEM;
+	priv_ser = devm_kzalloc(dev, sizeof(struct ds90ub971_priv), GFP_KERNEL);
+	if (!priv)
+		return -ENOMEM;
 
-    priv->ser[ser_nr] = priv_ser;
-    priv->ser[ser_nr]->initialized = 0;
-    return 0;
+	priv->ser[ser_nr] = priv_ser;
+	priv->ser[ser_nr]->initialized = 0;
+	return 0;
 }
 
 static int ds90ub971_i2c_client(struct ds90ub9702_priv *priv, int ser_nr,
-                                int addr) {
-    struct i2c_client *new_client = NULL;
-    struct device *dev = &priv->client->dev;
+								int addr) {
+	struct i2c_client *new_client = NULL;
+	struct device *dev = &priv->client->dev;
 
-    struct i2c_board_info *ser_board_info;
-    ser_board_info = devm_kzalloc(dev, sizeof(struct i2c_board_info), GFP_KERNEL);
-    ser_board_info->addr = addr;
+	struct i2c_board_info *ser_board_info;
+	ser_board_info = devm_kzalloc(dev, sizeof(struct i2c_board_info), GFP_KERNEL);
+	ser_board_info->addr = addr;
 
-    new_client = i2c_new_device(priv->client->adapter, ser_board_info);
-    if (!new_client) {
-        dev_warn(dev, "failed to add i2c client\n");
-        return -1;
-    }
+	new_client = i2c_new_device(priv->client->adapter, ser_board_info);
+	if (!new_client) {
+		dev_warn(dev, "failed to add i2c client\n");
+		return -1;
+	}
 
-    priv->ser[ser_nr]->client = new_client;
-    dev_info(dev, "%s init client done\n", __func__);
-    return 0;
+	priv->ser[ser_nr]->client = new_client;
+	dev_info(dev, "%s init client done\n", __func__);
+	return 0;
 }
 
 static int ds90ub971_parse_dt(struct i2c_client *client,
-                              struct ds90ub9702_priv *priv) {
-    struct device *dev = &client->dev;
-    struct device_node *des = dev->of_node;
-    struct device_node *ser;
-    struct device_node *sers;
-    struct of_phandle_args i2c_addresses;
-    struct ds90ub971_priv *ds90ub971;
-    int i = 0;
+							  struct ds90ub9702_priv *priv) {
+	struct device *dev = &client->dev;
+	struct device_node *des = dev->of_node;
+	struct device_node *ser;
+	struct device_node *sers;
+	struct of_phandle_args i2c_addresses;
+	struct ds90ub971_priv *ds90ub971;
+	int i = 0;
 
-    u32 val = 0;
-    int err = 0;
-    int counter = 0;
-    priv->num_ser = 0;
+	u32 val = 0;
+	int err = 0;
+	int counter = 0;
+	priv->num_ser = 0;
 
-    /* get serializers device_node from dt */
-    sers = of_get_child_by_name(des, "serializers");
-    if (!sers) {
-        dev_info(dev, "%s: no serializers found in device tree\n",
-                 __func__);
-        return 0;
-    }
+	/* get serializers device_node from dt */
+	sers = of_get_child_by_name(des, "serializers");
+	if (!sers) {
+		dev_info(dev, "%s: no serializers found in device tree\n",
+				 __func__);
+		return 0;
+	}
 
-    dev_info(dev, "%s: parsing serializers device tree:\n", __func__);
+	dev_info(dev, "%s: parsing serializers device tree:\n", __func__);
 
-    /* go through all serializers in list */
-    for_each_child_of_node(sers, ser)
-    {
+	/* go through all serializers in list */
+	for_each_child_of_node(sers, ser)
+	{
 
-        if (counter >= NUM_SERIALIZER) {
-            dev_info(dev, "%s: too many serializers found in device tree\n",
-                     __func__);
-            break;
-        }
+		if (counter >= NUM_SERIALIZER) {
+			dev_info(dev, "%s: too many serializers found in device tree\n",
+					 __func__);
+			break;
+		}
 
-        /* allocate memory for serializer */
-        err = ds90ub971_alloc(priv, counter);
-        if (err) {
-            dev_info(dev, "%s: - allocating ds90ub971 failed\n",
-                     __func__);
-            goto next;
-        }
-        ds90ub971 = priv->ser[counter];
+		/* allocate memory for serializer */
+		err = ds90ub971_alloc(priv, counter);
+		if (err) {
+			dev_info(dev, "%s: - allocating ds90ub971 failed\n",
+					 __func__);
+			goto next;
+		}
+		ds90ub971 = priv->ser[counter];
 
-        /* get rx-channel */
-        err = of_property_read_u32(ser, "rx-channel", &val);
-        if (err) {
-            dev_info(dev, "%s: - rx-channel property not found\n",
-                     __func__);
-            /* default value: 0 */
-            ds90ub971->rx_channel = 0;
-            dev_info(dev, "%s: rx-channel set to default val: 0\n",
-                     __func__);
-        } else {
-            /* set rx-channel*/
-            ds90ub971->rx_channel = val;
-            dev_info(dev, "%s: - serializer rx-channel: %i\n",
-                     __func__, val);
-        }
-        /* get i2c-channel */
-        err = of_property_read_u32(ser, "i2c-channel", &val);
-        if (err) {
-            dev_info(dev, "%s: - i2c-channel property not found\n",
-                     __func__);
-            /* default value: 0 */
-            ds90ub971->i2c_channel = 0;
-            dev_info(dev, "%s: i2c-channel set to default val: 0\n",
-                     __func__);
-        } else {
-            /* set i2c-channel*/
-            ds90ub971->i2c_channel = val;
-            dev_info(dev, "%s: - serializer i2c-channel: %i\n",
-                     __func__, val);
-        }
-        /* check test-pattern */
-        if (of_property_read_bool(ser, "test-pattern")) {
-            dev_info(dev, "%s: - test-pattern enabled\n", __func__);
-            ds90ub971->test_pattern = 1;
-        } else {
-            /* default value: 0 */
-            ds90ub971->test_pattern = 0;
-            dev_info(dev, "%s: -test-pattern disabled\n", __func__);
-        }
-        /* csi-lane-count */
-        err = of_property_read_u32(ser, "csi-lane-count", &val);
-        if (err) {
-            dev_info(dev, "%s: - csi-lane-count property not found\n",
-                     __func__);
-            /* default value: 4 */
-            ds90ub971->csi_lane_count = 4;
-            dev_info(dev, "%s: csi-lane-count set to default val: 4\n",
-                     __func__);
-        } else {
-            /* set csi-lane-count*/
-            ds90ub971->csi_lane_count = val;
-            dev_info(dev, "%s: - csi-lane-count %i\n", __func__, val);
-        }
+		/* get rx-channel */
+		err = of_property_read_u32(ser, "rx-channel", &val);
+		if (err) {
+			dev_info(dev, "%s: - rx-channel property not found\n",
+					 __func__);
+			/* default value: 0 */
+			ds90ub971->rx_channel = 0;
+			dev_info(dev, "%s: rx-channel set to default val: 0\n",
+					 __func__);
+		} else {
+			/* set rx-channel*/
+			ds90ub971->rx_channel = val;
+			dev_info(dev, "%s: - serializer rx-channel: %i\n",
+					 __func__, val);
+		}
+		/* get i2c-channel */
+		err = of_property_read_u32(ser, "i2c-channel", &val);
+		if (err) {
+			dev_info(dev, "%s: - i2c-channel property not found\n",
+					 __func__);
+			/* default value: 0 */
+			ds90ub971->i2c_channel = 0;
+			dev_info(dev, "%s: i2c-channel set to default val: 0\n",
+					 __func__);
+		} else {
+			/* set i2c-channel*/
+			ds90ub971->i2c_channel = val;
+			dev_info(dev, "%s: - serializer i2c-channel: %i\n",
+					 __func__, val);
+		}
+		/* check test-pattern */
+		if (of_property_read_bool(ser, "test-pattern")) {
+			dev_info(dev, "%s: - test-pattern enabled\n", __func__);
+			ds90ub971->test_pattern = 1;
+		} else {
+			/* default value: 0 */
+			ds90ub971->test_pattern = 0;
+			dev_info(dev, "%s: -test-pattern disabled\n", __func__);
+		}
+		/* csi-lane-count */
+		err = of_property_read_u32(ser, "csi-lane-count", &val);
+		if (err) {
+			dev_info(dev, "%s: - csi-lane-count property not found\n",
+					 __func__);
+			/* default value: 4 */
+			ds90ub971->csi_lane_count = 4;
+			dev_info(dev, "%s: csi-lane-count set to default val: 4\n",
+					 __func__);
+		} else {
+			/* set csi-lane-count*/
+			ds90ub971->csi_lane_count = val;
+			dev_info(dev, "%s: - csi-lane-count %i\n", __func__, val);
+		}
 
-        /* GPIO output enable */
-        err = of_property_read_u32(ser, "gpio0-output-enable", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio0-output-enable property not found\n",
-                     __func__);
-            /* default value: 0 */
-            ds90ub971->gpio0_oe = 0;
-            dev_info(dev, "%s: gpio0-output-enable to default val: 0\n",
-                     __func__);
-        } else {
-            /* set gpio0-output-enable*/
-            ds90ub971->gpio0_oe = val;
-            dev_info(dev, "%s: - gpio0-output-enable %i\n",
-                     __func__, val);
-        }
+		/* GPIO output enable */
+		err = of_property_read_u32(ser, "gpio0-output-enable", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio0-output-enable property not found\n",
+					 __func__);
+			/* default value: 0 */
+			ds90ub971->gpio0_oe = 0;
+			dev_info(dev, "%s: gpio0-output-enable to default val: 0\n",
+					 __func__);
+		} else {
+			/* set gpio0-output-enable*/
+			ds90ub971->gpio0_oe = val;
+			dev_info(dev, "%s: - gpio0-output-enable %i\n",
+					 __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "gpio1-output-enable", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio1-output-enable property not found\n",
-                     __func__);
+		err = of_property_read_u32(ser, "gpio1-output-enable", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio1-output-enable property not found\n",
+					 __func__);
 
-            /* default value: 0 */
-            ds90ub971->gpio1_oe = 0;
-            dev_info(dev, "%s: gpio1-output-enable to default val: 0\n",
-                     __func__);
-        } else {
-            /* set gpio1-output-enable*/
-            ds90ub971->gpio1_oe = val;
-            dev_info(dev, "%s: - gpio1-output-enable %i\n",
-                     __func__, val);
-        }
+			/* default value: 0 */
+			ds90ub971->gpio1_oe = 0;
+			dev_info(dev, "%s: gpio1-output-enable to default val: 0\n",
+					 __func__);
+		} else {
+			/* set gpio1-output-enable*/
+			ds90ub971->gpio1_oe = val;
+			dev_info(dev, "%s: - gpio1-output-enable %i\n",
+					 __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "gpio2-output-enable", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio2-output-enable property not found\n",
-                     __func__);
-            /* default value: 0 */
-            ds90ub971->gpio2_oe = 0;
-            dev_info(dev, "%s: gpio2-output-enable to default val: 0\n",
-                     __func__);
-        } else {
-            /* set gpio2-output-enable*/
-            ds90ub971->gpio2_oe = val;
-            dev_info(dev, "%s: - gpio2-output-enable %i\n",
-                     __func__, val);
-        }
+		err = of_property_read_u32(ser, "gpio2-output-enable", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio2-output-enable property not found\n",
+					 __func__);
+			/* default value: 0 */
+			ds90ub971->gpio2_oe = 0;
+			dev_info(dev, "%s: gpio2-output-enable to default val: 0\n",
+					 __func__);
+		} else {
+			/* set gpio2-output-enable*/
+			ds90ub971->gpio2_oe = val;
+			dev_info(dev, "%s: - gpio2-output-enable %i\n",
+					 __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "gpio3-output-enable", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio3-output-enable property not found\n",
-                     __func__);
-            /* default value: 0 */
-            ds90ub971->gpio3_oe = 0;
-            dev_info(dev, "%s: gpio3-output-enable to default val: 0\n",
-                     __func__);
-        } else {
-            /* set gpio3-output-enable*/
-            ds90ub971->gpio3_oe = val;
-            dev_info(dev, "%s: - gpio3-output-enable %i\n",
-                     __func__, val);
-        }
+		err = of_property_read_u32(ser, "gpio3-output-enable", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio3-output-enable property not found\n",
+					 __func__);
+			/* default value: 0 */
+			ds90ub971->gpio3_oe = 0;
+			dev_info(dev, "%s: gpio3-output-enable to default val: 0\n",
+					 __func__);
+		} else {
+			/* set gpio3-output-enable*/
+			ds90ub971->gpio3_oe = val;
+			dev_info(dev, "%s: - gpio3-output-enable %i\n",
+					 __func__, val);
+		}
 
-        /* GPIO output control */
-        err = of_property_read_u32(ser, "gpio0-control", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio0-control property not found\n",
-                     __func__);
-            /* default value: 0b1000 */
-            ds90ub971->gpio0_oc = 0b1000;
-            dev_info(dev, "%s: gpio0-control to default val: 0b1000\n",
-                     __func__);
-        } else {
-            /* set gpio0-control*/
-            ds90ub971->gpio0_oc = val;
-            dev_info(dev, "%s: - gpio0-control %i\n",
-                     __func__, val);
-        }
+		/* GPIO output control */
+		err = of_property_read_u32(ser, "gpio0-control", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio0-control property not found\n",
+					 __func__);
+			/* default value: 0b1000 */
+			ds90ub971->gpio0_oc = 0b1000;
+			dev_info(dev, "%s: gpio0-control to default val: 0b1000\n",
+					 __func__);
+		} else {
+			/* set gpio0-control*/
+			ds90ub971->gpio0_oc = val;
+			dev_info(dev, "%s: - gpio0-control %i\n",
+					 __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "gpio1-control", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio1-control property not found\n",
-                     __func__);
+		err = of_property_read_u32(ser, "gpio1-control", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio1-control property not found\n",
+					 __func__);
 
-            /* default value: 0b1000 */
-            ds90ub971->gpio1_oc = 0b1000;
-            dev_info(dev, "%s: gpio1-control to default val: 0b1000\n",
-                     __func__);
-        } else {
-            /* set gpio1-control*/
-            ds90ub971->gpio1_oc = val;
-            dev_info(dev, "%s: - gpio1-control %i\n",
-                     __func__, val);
-        }
+			/* default value: 0b1000 */
+			ds90ub971->gpio1_oc = 0b1000;
+			dev_info(dev, "%s: gpio1-control to default val: 0b1000\n",
+					 __func__);
+		} else {
+			/* set gpio1-control*/
+			ds90ub971->gpio1_oc = val;
+			dev_info(dev, "%s: - gpio1-control %i\n",
+					 __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "gpio2-control", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio2-control property not found\n",
-                     __func__);
-            /* default value: 0b1000 */
-            ds90ub971->gpio2_oc = 0b1000;
-            dev_info(dev, "%s: gpio2-control to default val: 0b1000\n",
-                     __func__);
-        } else {
-            /* set gpio2-control*/
-            ds90ub971->gpio2_oc = val;
-            dev_info(dev, "%s: - gpio2-control %i\n",
-                     __func__, val);
-        }
+		err = of_property_read_u32(ser, "gpio2-control", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio2-control property not found\n",
+					 __func__);
+			/* default value: 0b1000 */
+			ds90ub971->gpio2_oc = 0b1000;
+			dev_info(dev, "%s: gpio2-control to default val: 0b1000\n",
+					 __func__);
+		} else {
+			/* set gpio2-control*/
+			ds90ub971->gpio2_oc = val;
+			dev_info(dev, "%s: - gpio2-control %i\n",
+					 __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "gpio3-control", &val);
-        if (err) {
-            dev_info(dev, "%s: - gpio3-control property not found\n",
-                     __func__);
-            /* default value: 0b1000 */
-            ds90ub971->gpio3_oc = 0b1000;
-            dev_info(dev, "%s: gpio3-control to default val: 0b1000\n",
-                     __func__);
-        } else {
-            /* set gpio3-control*/
-            ds90ub971->gpio3_oc = val;
-            dev_info(dev, "%s: - gpio3-control %i\n",
-                     __func__, val);
-        }
+		err = of_property_read_u32(ser, "gpio3-control", &val);
+		if (err) {
+			dev_info(dev, "%s: - gpio3-control property not found\n",
+					 __func__);
+			/* default value: 0b1000 */
+			ds90ub971->gpio3_oc = 0b1000;
+			dev_info(dev, "%s: gpio3-control to default val: 0b1000\n",
+					 __func__);
+		} else {
+			/* set gpio3-control*/
+			ds90ub971->gpio3_oc = val;
+			dev_info(dev, "%s: - gpio3-control %i\n",
+					 __func__, val);
+		}
 
-        /* err = of_property_read_u32(ser, "hs-clk-div", &val);                     //NEW
-        if(err) {
-            dev_info(dev, "%s: - hs-clk-div property not found\n",
-                 __func__);
+		/* err = of_property_read_u32(ser, "hs-clk-div", &val);                     //NEW
+		if(err) {
+			dev_info(dev, "%s: - hs-clk-div property not found\n",
+				 __func__);
 
-            * default value: 0x2 *
-            ds90ub971->hs_clk_div = 0x2;
-            dev_info(dev, "%s: - hs-clk-div set to default val: 0x2 (div by 4)\n",
-                 __func__);
-        } else {
-            switch(val) {
-            case 1:
-                ds90ub971->hs_clk_div = 0b000;
-                break;
-            case 2:
-                ds90ub971->hs_clk_div = 0b001;
-                break;
-            case 4:
-                ds90ub971->hs_clk_div = 0b010;
-                break;
-            case 8:
-                ds90ub971->hs_clk_div = 0b011;
-                break;
-            case 16:
-                ds90ub971->hs_clk_div = 0b100;
-                break;
-            default:
-                ds90ub971->hs_clk_div = 0b010;
-                dev_info(dev, "%s: - %i no valid value for hs-clk-div\n",
-                     __func__, val);
-                break;
-            }
-            dev_info(dev,"%s: - hs-clk-div set to val: %i (div by %i)\n",
-                 __func__, ds90ub971->hs_clk_div, val);
-        }   */
+			* default value: 0x2 *
+			ds90ub971->hs_clk_div = 0x2;
+			dev_info(dev, "%s: - hs-clk-div set to default val: 0x2 (div by 4)\n",
+				 __func__);
+		} else {
+			switch(val) {
+			case 1:
+				ds90ub971->hs_clk_div = 0b000;
+				break;
+			case 2:
+				ds90ub971->hs_clk_div = 0b001;
+				break;
+			case 4:
+				ds90ub971->hs_clk_div = 0b010;
+				break;
+			case 8:
+				ds90ub971->hs_clk_div = 0b011;
+				break;
+			case 16:
+				ds90ub971->hs_clk_div = 0b100;
+				break;
+			default:
+				ds90ub971->hs_clk_div = 0b010;
+				dev_info(dev, "%s: - %i no valid value for hs-clk-div\n",
+					 __func__, val);
+				break;
+			}
+			dev_info(dev,"%s: - hs-clk-div set to val: %i (div by %i)\n",
+				 __func__, ds90ub971->hs_clk_div, val);
+		}   */
 
-        err = of_property_read_u32(ser, "osc-switch", &val);
-        if (err) {
-            dev_info(dev, "%s: - osc-switch property not found\n",
-                     __func__);
-            /* default value: 0 */
-            ds90ub971->osc_switch = 0;
-            dev_info(dev, "%s: - osc-switch set to default val: 0\n",
-                     __func__);
-        } else {
-            /* set osc-switch*/
-            ds90ub971->osc_switch = val;
-            dev_info(dev, "%s: - osc-switch %i\n", __func__, val);
-        }
+		err = of_property_read_u32(ser, "osc-switch", &val);
+		if (err) {
+			dev_info(dev, "%s: - osc-switch property not found\n",
+					 __func__);
+			/* default value: 0 */
+			ds90ub971->osc_switch = 0;
+			dev_info(dev, "%s: - osc-switch set to default val: 0\n",
+					 __func__);
+		} else {
+			/* set osc-switch*/
+			ds90ub971->osc_switch = val;
+			dev_info(dev, "%s: - osc-switch %i\n", __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "div-m-osc-val", &val);
-        if (err) {
-            dev_info(dev, "%s: - div-m-osc-val property not found\n",
-                     __func__);
-            /* default value: 1 */
-            ds90ub971->div_m_osc_val = 1;
-            dev_info(dev, "%s: - div-m-osc-val set to default val: 1\n",
-                     __func__);
-        } else {
-            /* set div-m-osc-val*/
-            ds90ub971->div_m_val = val;
-            dev_info(dev, "%s: - div-m-osc-val %i\n", __func__, val);
-        }
+		err = of_property_read_u32(ser, "div-m-osc-val", &val);
+		if (err) {
+			dev_info(dev, "%s: - div-m-osc-val property not found\n",
+					 __func__);
+			/* default value: 1 */
+			ds90ub971->div_m_osc_val = 1;
+			dev_info(dev, "%s: - div-m-osc-val set to default val: 1\n",
+					 __func__);
+		} else {
+			/* set div-m-osc-val*/
+			ds90ub971->div_m_val = val;
+			dev_info(dev, "%s: - div-m-osc-val %i\n", __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "div-n-osc-val", &val);
-        if (err) {
-            dev_info(dev, "%s: - div-n-osc-val property not found\n",
-                     __func__);
-            /* default value: 0x20 */
-            ds90ub971->div_n_osc_val = 0x20;
-            dev_info(dev, "%s: - div-n-osc-val set to default val: 0x20\n",
-                     __func__);
-        } else {
-            /* set div-m-val*/
-            ds90ub971->div_n_osc_val = val;
-            dev_info(dev, "%s: - div-n-osc-val %i\n", __func__, val);
-        }
+		err = of_property_read_u32(ser, "div-n-osc-val", &val);
+		if (err) {
+			dev_info(dev, "%s: - div-n-osc-val property not found\n",
+					 __func__);
+			/* default value: 0x20 */
+			ds90ub971->div_n_osc_val = 0x20;
+			dev_info(dev, "%s: - div-n-osc-val set to default val: 0x20\n",
+					 __func__);
+		} else {
+			/* set div-m-val*/
+			ds90ub971->div_n_osc_val = val;
+			dev_info(dev, "%s: - div-n-osc-val %i\n", __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "div-m-val", &val);
-        if (err) {
-            dev_info(dev, "%s: - div-m-val property not found\n",
-                     __func__);
-            /* default value: 1 */
-            ds90ub971->div_m_val = 1;
-            dev_info(dev, "%s: - div-m-val set to default val: 1\n",
-                     __func__);
-        } else {
-            /* set div-m-val*/
-            ds90ub971->div_m_val = val;
-            dev_info(dev, "%s: - div-m-val %i\n", __func__, val);
-        }
+		err = of_property_read_u32(ser, "div-m-val", &val);
+		if (err) {
+			dev_info(dev, "%s: - div-m-val property not found\n",
+					 __func__);
+			/* default value: 1 */
+			ds90ub971->div_m_val = 1;
+			dev_info(dev, "%s: - div-m-val set to default val: 1\n",
+					 __func__);
+		} else {
+			/* set div-m-val*/
+			ds90ub971->div_m_val = val;
+			dev_info(dev, "%s: - div-m-val %i\n", __func__, val);
+		}
 
-        err = of_property_read_u32(ser, "div-n-val", &val);
-        if (err) {
-            dev_info(dev, "%s: - div-n-val property not found\n",
-                     __func__);
-            /* default value: 0x28 */
-            ds90ub971->div_n_val = 0x28;
-            dev_info(dev, "%s: - div-n-val set to default val: 0x28\n",
-                     __func__);
-        } else {
-            /* set div-n-val*/
-            ds90ub971->div_n_val = val;
-            dev_info(dev, "%s: - div-n-val %i\n", __func__, val);
-        }
+		err = of_property_read_u32(ser, "div-n-val", &val);
+		if (err) {
+			dev_info(dev, "%s: - div-n-val property not found\n",
+					 __func__);
+			/* default value: 0x28 */
+			ds90ub971->div_n_val = 0x28;
+			dev_info(dev, "%s: - div-n-val set to default val: 0x28\n",
+					 __func__);
+		} else {
+			/* set div-n-val*/
+			ds90ub971->div_n_val = val;
+			dev_info(dev, "%s: - div-n-val %i\n", __func__, val);
+		}
 
-        /* get i2c address */
-        err = of_property_read_u32(ser, "i2c-address", &val);
-        if (err) {
-            dev_info(dev, "%s: - i2c-address not found\n", __func__);
-            ds90ub971->i2c_address = 0x18;
-            dev_info(dev, "%s: - i2c-address set to default val: 0x18\n",
-                     __func__);
-        } else {
-            dev_info(dev, "%s: - i2c-address: 0x%X \n", __func__, val);
-            ds90ub971->i2c_address = val;
-        }
+		/* get i2c address */
+		err = of_property_read_u32(ser, "i2c-address", &val);
+		if (err) {
+			dev_info(dev, "%s: - i2c-address not found\n", __func__);
+			ds90ub971->i2c_address = 0x18;
+			dev_info(dev, "%s: - i2c-address set to default val: 0x18\n",
+					 __func__);
+		} else {
+			dev_info(dev, "%s: - i2c-address: 0x%X \n", __func__, val);
+			ds90ub971->i2c_address = val;
+		}
 
-        err = ds90ub971_i2c_client(priv, counter, val);
-        if (err) {
-            dev_info(dev, "%s: - ds90ub971_i2c_client failed\n",
-                     __func__);
-            goto next;
-        }
+		err = ds90ub971_i2c_client(priv, counter, val);
+		if (err) {
+			dev_info(dev, "%s: - ds90ub971_i2c_client failed\n",
+					 __func__);
+			goto next;
+		}
 
-        err = ds90ub971_regmap_init(priv, counter);
-        if (err) {
-            dev_info(dev, "%s: - ds90ub971_regmap_init failed\n",
-                     __func__);
-            goto next;
-        }
+		err = ds90ub971_regmap_init(priv, counter);
+		if (err) {
+			dev_info(dev, "%s: - ds90ub971_regmap_init failed\n",
+					 __func__);
+			goto next;
+		}
 
-        /* get i2c-slave addresses*/
-        err = of_parse_phandle_with_args(ser, "i2c-slave", "list-cells",
-                                         0, &i2c_addresses);
-        if (err) {
-            dev_info(dev, "%s: - reading i2c-slave addresses failed\n",
-                     __func__);
-            ds90ub971->i2c_alias_num = 0;
-        } else {
-            ds90ub971->i2c_alias_num = i2c_addresses.args_count;
-            /* writting i2c slave addresses into array*/
-            for (i = 0; (i < i2c_addresses.args_count) &&
-                        (i < NUM_ALIAS); i++) {
-                ds90ub971->i2c_slave[i] = i2c_addresses.args[i];
-            }
-        }
+		/* get i2c-slave addresses*/
+		err = of_parse_phandle_with_args(ser, "i2c-slave", "list-cells",
+										 0, &i2c_addresses);
+		if (err) {
+			dev_info(dev, "%s: - reading i2c-slave addresses failed\n",
+					 __func__);
+			ds90ub971->i2c_alias_num = 0;
+		} else {
+			ds90ub971->i2c_alias_num = i2c_addresses.args_count;
+			/* writting i2c slave addresses into array*/
+			for (i = 0; (i < i2c_addresses.args_count) &&
+						(i < NUM_ALIAS); i++) {
+				ds90ub971->i2c_slave[i] = i2c_addresses.args[i];
+			}
+		}
 
-        /* get slave-aliases */
-        err = of_parse_phandle_with_args(ser, "slave-alias",
-                                         "list-cells", 0, &i2c_addresses);
-        if (err) {
-            dev_info(dev, "%s: - reading i2c slave-alias addresses failed\n",
-                     __func__);
-            ds90ub971->i2c_alias_num = 0;
-        } else {
-            dev_info(dev, "%s: - num of slave alias pairs: %i\n",
-                     __func__, i2c_addresses.args_count);
-            /* writting i2c alias addresses into array*/
-            for (i = 0; (i < i2c_addresses.args_count) && (i < NUM_ALIAS);
-                 i++) {
-                ds90ub971->i2c_alias[i] = i2c_addresses.args[i];
-                dev_info(dev, "%s: - slave addr: 0x%X, alias addr: 0x%X\n",
-                         __func__, ds90ub971->i2c_slave[i],
-                         ds90ub971->i2c_alias[i]);
-            }
-        }
+		/* get slave-aliases */
+		err = of_parse_phandle_with_args(ser, "slave-alias",
+										 "list-cells", 0, &i2c_addresses);
+		if (err) {
+			dev_info(dev, "%s: - reading i2c slave-alias addresses failed\n",
+					 __func__);
+			ds90ub971->i2c_alias_num = 0;
+		} else {
+			dev_info(dev, "%s: - num of slave alias pairs: %i\n",
+					 __func__, i2c_addresses.args_count);
+			/* writting i2c alias addresses into array*/
+			for (i = 0; (i < i2c_addresses.args_count) && (i < NUM_ALIAS);
+				 i++) {
+				ds90ub971->i2c_alias[i] = i2c_addresses.args[i];
+				dev_info(dev, "%s: - slave addr: 0x%X, alias addr: 0x%X\n",
+						 __func__, ds90ub971->i2c_slave[i],
+						 ds90ub971->i2c_alias[i]);
+			}
+		}
 
-        if (of_property_read_bool(ser, "continuous-clock")) {
-            dev_info(dev, "%s: - continuous clock enabled\n",
-                     __func__);
-            ds90ub971->conts_clk = 1;
-        } else {
-            /* default value: 0 */
-            ds90ub971->conts_clk = 0;
-            dev_info(dev, "%s: - discontinuous clock used\n",
-                     __func__);
-        }
+		if (of_property_read_bool(ser, "continuous-clock")) {
+			dev_info(dev, "%s: - continuous clock enabled\n",
+					 __func__);
+			ds90ub971->conts_clk = 1;
+		} else {
+			/* default value: 0 */
+			ds90ub971->conts_clk = 0;
+			dev_info(dev, "%s: - discontinuous clock used\n",
+					 __func__);
+		}
 
-        if (of_property_read_bool(ser, "i2c-pass-through-all")) {
-            dev_info(dev, "%s: - i2c-pass-through-all enabled\n",
-                     __func__);
-            ds90ub971->i2c_pt = 1;
-        } else {
-            /* default value: 0 */
-            ds90ub971->i2c_pt = 0;
-            dev_info(dev, "%s: - i2c-pass-through-all disabled\n",
-                     __func__);
-        }
+		if (of_property_read_bool(ser, "i2c-pass-through-all")) {
+			dev_info(dev, "%s: - i2c-pass-through-all enabled\n",
+					 __func__);
+			ds90ub971->i2c_pt = 1;
+		} else {
+			/* default value: 0 */
+			ds90ub971->i2c_pt = 0;
+			dev_info(dev, "%s: - i2c-pass-through-all disabled\n",
+					 __func__);
+		}
 
-        err = of_property_read_u32(ser, "virtual-channel-map-0", &val);                 //NEW
-        if (err) {
-            dev_info(dev, "%s: - virtual-channel-map property not found\n",
-                     __func__);
-            ds90ub971->vc_map0 = 0x10;                                                  //NEW
-            dev_info(dev, "%s: - virtual-channel-map set to default val: 0x10\n",       //NEW
-                     __func__);
-        } else {
-            /* set vc_map0*/
-            ds90ub971->vc_map0 = 0x10;                                                  //NEW
-            dev_info(dev, "%s: - virtual-channel-map-0 0x%x\n", __func__, ds90ub971->vc_map0);     //NEW
-        }
+		err = of_property_read_u32(ser, "virtual-channel-map-0", &val);                 //NEW
+		if (err) {
+			dev_info(dev, "%s: - virtual-channel-map property not found\n",
+					 __func__);
+			ds90ub971->vc_map0 = 0x10;                                                  //NEW
+			dev_info(dev, "%s: - virtual-channel-map set to default val: 0x10\n",       //NEW
+					 __func__);
+		} else {
+			/* set vc_map0*/
+			ds90ub971->vc_map0 = 0x10;                                                  //NEW
+			dev_info(dev, "%s: - virtual-channel-map-0 0x%x\n", __func__, ds90ub971->vc_map0);     //NEW
+		}
 
-        err = of_property_read_u32(ser, "virtual-channel-map-1", &val);                 //NEW
-        if (err) {
-            dev_info(dev, "%s: - virtual-channel-map property not found\n",
-                     __func__);
-            ds90ub971->vc_map1 = 0x32;                                                  //NEW
-            dev_info(dev, "%s: - virtual-channel-map set to default val: 0x32\n",       //NEW
-                     __func__);
-        } else {
-            /* set vc_map1*/
-            ds90ub971->vc_map1 = 0x32;                                                  //NEW
-            dev_info(dev, "%s: - virtual-channel-map-1 0x%x\n", __func__, ds90ub971->vc_map1);     //NEW
-        }
+		err = of_property_read_u32(ser, "virtual-channel-map-1", &val);                 //NEW
+		if (err) {
+			dev_info(dev, "%s: - virtual-channel-map property not found\n",
+					 __func__);
+			ds90ub971->vc_map1 = 0x32;                                                  //NEW
+			dev_info(dev, "%s: - virtual-channel-map set to default val: 0x32\n",       //NEW
+					 __func__);
+		} else {
+			/* set vc_map1*/
+			ds90ub971->vc_map1 = 0x32;                                                  //NEW
+			dev_info(dev, "%s: - virtual-channel-map-1 0x%x\n", __func__, ds90ub971->vc_map1);     //NEW
+		}
 
-        /* all initialization of this serializer complete */
-        ds90ub971->initialized = 1;
-        priv->num_ser += 1;
-        dev_info(dev, "%s: serializer %i successfully parsed\n", __func__,
-                 counter);
-        next:
-        counter += 1;
-    }
-    dev_info(dev, "%s: done\n", __func__);
-    return 0;
+		/* all initialization of this serializer complete */
+		ds90ub971->initialized = 1;
+		priv->num_ser += 1;
+		dev_info(dev, "%s: serializer %i successfully parsed\n", __func__,
+				 counter);
+		next:
+		counter += 1;
+	}
+	dev_info(dev, "%s: done\n", __func__);
+	return 0;
 
 }
 
@@ -2105,135 +2146,133 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
  *----------------------------------------------------------------------------*/
 
 static int ds90ub9702_probe(struct i2c_client *client,
-                            const struct i2c_device_id *id) {
-    struct ds90ub9702_priv *priv;
-    struct device *dev = &client->dev;
-    int err;
-    int i = 0;
-    int pr_value;
+							const struct i2c_device_id *id) {
+	struct ds90ub9702_priv *priv;
+	struct device *dev = &client->dev;
+	int err;
+	int i = 0;
+	int pr_value;
 
-    dev_info(dev, "%s: start\n", __func__);
+	dev_info(dev, "%s: start\n", __func__);
 
-    priv = devm_kzalloc(dev, sizeof(struct ds90ub9702_priv), GFP_KERNEL);
-    if (!priv)
-        return -ENOMEM;
+	priv = devm_kzalloc(dev, sizeof(struct ds90ub9702_priv), GFP_KERNEL);
+	if (!priv)
+		return -ENOMEM;
 
-    priv->client = client;
-    i2c_set_clientdata(client, priv);
+	priv->client = client;
+	i2c_set_clientdata(client, priv);
 
-    /* force to select the rx port the first time */
-    priv->sel_rx_port = -1;
+	/* force to select the rx port the first time */
+	priv->sel_rx_port = -1;
 
-    /* force to set ia config the first time */
-    priv->sel_ia_config = -1;
+	/* force to set ia config the first time */
+	priv->sel_ia_config = -1;
 
-    err = ds90ub9702_parse_dt(priv);
-    if (unlikely(err < 0)) {
-        dev_err(dev, "%s: error parsing device tree\n", __func__);
-        goto err_parse_dt;
-    }
+	err = ds90ub9702_parse_dt(priv);
+	if (unlikely(err < 0)) {
+		dev_err(dev, "%s: error parsing device tree\n", __func__);
+		goto err_parse_dt;
+	}
 
-    err = ds90ub9702_init_gpio(priv);
-    if (unlikely(err < 0)) {
-        dev_err(dev, "%s: error initializing gpios\n", __func__);
-        goto err_init_gpio;
-    }
+	err = ds90ub9702_init_gpio(priv);
+	if (unlikely(err < 0)) {
+		dev_err(dev, "%s: error initializing gpios\n", __func__);
+		goto err_init_gpio;
+	}
 
-    priv->regmap = devm_regmap_init_i2c(client, &ds90ub9702_regmap_config);
-    if (IS_ERR_VALUE(priv->regmap)) {
-        err = PTR_ERR(priv->regmap);
-        dev_err(dev, "%s: regmap init failed (%d)\n", __func__, err);
-        goto err_regmap;
-    }
+	priv->regmap = devm_regmap_init_i2c(client, &ds90ub9702_regmap_config);
+	if (IS_ERR_VALUE(priv->regmap)) {
+		err = PTR_ERR(priv->regmap);
+		dev_err(dev, "%s: regmap init failed (%d)\n", __func__, err);
+		goto err_regmap;
+	}
 
-    ds90ub971_parse_dt(client, priv);
+	ds90ub971_parse_dt(client, priv);
 
-    /* turn on deserializer */
-    ds90ub9702_pwr_enable(priv);
+	/* turn on deserializer */
+	ds90ub9702_pwr_enable(priv);
 
-    msleep(6); // wait for sensor to start
+	msleep(6); // wait for sensor to start
 
-    /* init deserializer */
-    err = ds90ub9702_init(priv, 0);
-    if (unlikely(err)) {
-        dev_err(dev, "%s: error initializing ds90ub9702\n", __func__);
-        goto err_regmap;
-    }
-    dev_info(dev, "%s: init ds90ub9702_done\n", __func__);
+	/* init deserializer */
+	err = ds90ub9702_init(priv, 0);
+	if (unlikely(err)) {
+		dev_err(dev, "%s: error initializing ds90ub9702\n", __func__);
+		goto err_regmap;
+	}
+	dev_info(dev, "%s: init ds90ub9702_done\n", __func__);
 
-    msleep(500);
+	msleep(500);
 
-    /* init serializers */
-    for (; i < priv->num_ser; i++) {
-        /* check if serializer is initialized */
-        if (priv->ser[i]->initialized == 0)
-            continue;
-        /*init serializer*/
-        err = ds90ub971_init(priv->ser[i]);
-        if (err) {
-            dev_info(dev,
-                     "serializer %i init_serializer failed\n", i);
-            continue;
-        }
-    }
-    err = ds90ub9702_read(priv, TI9702_REG_CSI_CTL, &pr_value);
-    dev_info(dev, "CSI_REG_value after complete initialization: %u\n", pr_value);
+	/* init serializers */
+	for (; i < priv->num_ser; i++) {
+		/* check if serializer is initialized */
+		if (priv->ser[i]->initialized == 0)
+			continue;
+		/*init serializer*/
+		err = ds90ub971_init(priv->ser[i]);
+		if (err) {
+			dev_info(dev,
+					 "serializer %i init_serializer failed\n", i);
+			continue;
+		}
+	}
+	err = ds90ub9702_read(priv, TI9702_REG_CSI_CTL, &pr_value);
+	dev_info(dev, "CSI_REG_value after complete initialization: %u\n", pr_value);
 
-    msleep(500);
+	msleep(500);
 
 #ifdef ENABLE_SYSFS_TP
-    /* device attribute on sysfs */
-    dev_set_drvdata(dev, priv);
-    err = device_create_file(dev, &dev_attr_test_pattern_des);
-    if (unlikely(err < 0))
-        dev_err(dev, "deserializer cant create device attribute %s\n",
-                dev_attr_test_pattern_des.attr.name);
+	/* device attribute on sysfs */
+	dev_set_drvdata(dev, priv);
+	err = device_create_file(dev, &dev_attr_test_pattern_des);
+	if (unlikely(err < 0))
+		dev_err(dev, "deserializer cant create device attribute %s\n",
+				dev_attr_test_pattern_des.attr.name);
 #endif
 
-    return 0;
+	return 0;
 
-    err_regmap:
-    ds90ub971_free(priv);
-    ds90ub9702_pwr_disable(priv);
-    ds90ub9702_free_gpio(priv);
-    err_init_gpio:
-    err_parse_dt:
-    devm_kfree(dev, priv);
-    return err;
+	err_regmap:
+	ds90ub971_free(priv);
+	ds90ub9702_pwr_disable(priv);
+	ds90ub9702_free_gpio(priv);
+	err_init_gpio:
+	err_parse_dt:
+	devm_kfree(dev, priv);
+	return err;
 }
 
 static int ds90ub9702_remove(struct i2c_client *client) {
-    struct ds90ub9702_priv *priv = dev_get_drvdata(&client->dev);
+	struct ds90ub9702_priv *priv = dev_get_drvdata(&client->dev);
 
-    ds90ub971_free(priv);
-    ds90ub9702_pwr_disable(priv);
-    ds90ub9702_free_gpio(priv);
+	ds90ub971_free(priv);
+	ds90ub9702_pwr_disable(priv);
+	ds90ub9702_free_gpio(priv);
 
-    dev_info(&client->dev, "ds90ub9702 removed\n");
-    return 0;
+	dev_info(&client->dev, "ds90ub9702 removed\n");
+	return 0;
 }
 
 static const struct i2c_device_id ds90ub9702_id[] = {
-        {"ti,ds90ub9702", 0},
-        {/* sentinel */},
+		{"ti,ds90ub9702", 0},
+		{/* sentinel */},
 };
 
 static struct i2c_driver ds90ub9702_driver = {
-        .driver =
-                {
-                        .name = "i2c-ds90ub9702",
-                        .of_match_table = of_match_ptr(ds90ub9702_of_match),
-                },
-        .probe = ds90ub9702_probe,
-        .remove = ds90ub9702_remove,
-        .id_table = ds90ub9702_id,
+		.driver =
+				{
+						.name = "i2c-ds90ub9702",
+						.of_match_table = of_match_ptr(ds90ub9702_of_match),
+				},
+		.probe = ds90ub9702_probe,
+		.remove = ds90ub9702_remove,
+		.id_table = ds90ub9702_id,
 };
 
-MODULE_DEVICE_TABLE(of, ds90ub9702_of_match
-);
+MODULE_DEVICE_TABLE(of, ds90ub9702_of_match);
 
-MODULE_DEVICE_TABLE(i2c, ds90ub9702_id
-);
+MODULE_DEVICE_TABLE(i2c, ds90ub9702_id);
 
 module_i2c_driver(ds90ub9702_driver);
 

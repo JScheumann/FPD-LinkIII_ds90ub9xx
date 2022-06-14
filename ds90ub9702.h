@@ -474,7 +474,7 @@
 /* #define TI9702_VOLT0_SENSE_LEVEL 0
 #define TI9702_VOLT1_SENSE_LEVEL 4  */
 
-#define TI9702_REG_SENSOR_STS_2 0x53
+#define TI9702_REG_SENSOR_STS_2 0x71
 #define TI9702_SENSOR_STS_2     0        //NEW (S.113)
 /* #define TI9702_TEMP_SENSE_LEVEL 0 */
 
@@ -1457,7 +1457,7 @@
 #define TI971_RX_LOCK_DETECT     6       //NEW
 #define TI971_AON_MODE_LATCHED   7       //NEW
 
-#define TI971_REG_GPIO_PIN_STS 0x53
+#define TI971_REG_GPIO_PIN_STS 0x71
 #define TI971_GPIO_STS         0
 
 #define TI971_REG_BIST_ERR_CNT 0x54
