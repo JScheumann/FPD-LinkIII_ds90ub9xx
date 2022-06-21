@@ -1146,72 +1146,72 @@
 #define NUM_SERIALIZER 2
 #define NUM_ALIAS 8
 
-struct ds90ub953_priv {
-	struct i2c_client *client;
-	struct regmap *regmap;
-	struct ds90ub954_priv *parent;
-	int rx_channel;
-	int test_pattern;
-	int i2c_address;
-	int csi_lane_count;
-	int i2c_alias_num; // number of slave alias pairs
-	int i2c_slave[NUM_ALIAS]; // array with the i2c slave addresses
-	int i2c_alias[NUM_ALIAS]; // array with the i2c alias addresses
-	int conts_clk; // continuous clock (0: discontinuous, 1: continuous)
-	int i2c_pt; // i2c-pass-through-all
+// struct ds90ub953_priv {
+// 	struct i2c_client *client;
+// 	struct regmap *regmap;
+// 	struct ds90ub954_priv *parent;
+// 	int rx_channel;
+// 	int test_pattern;
+// 	int i2c_address;
+// 	int csi_lane_count;
+// 	int i2c_alias_num; // number of slave alias pairs
+// 	int i2c_slave[NUM_ALIAS]; // array with the i2c slave addresses
+// 	int i2c_alias[NUM_ALIAS]; // array with the i2c alias addresses
+// 	int conts_clk; // continuous clock (0: discontinuous, 1: continuous)
+// 	int i2c_pt; // i2c-pass-through-all
 
-	int initialized;
+// 	int initialized;
 
-	int gpio0_oe; // gpio0_output_enable
-	int gpio1_oe; // gpio1_output_enable
-	int gpio2_oe; // gpio2_output_enable
-	int gpio3_oe; // gpio3_output_enable
+// 	int gpio0_oe; // gpio0_output_enable
+// 	int gpio1_oe; // gpio1_output_enable
+// 	int gpio2_oe; // gpio2_output_enable
+// 	int gpio3_oe; // gpio3_output_enable
 
-	int gpio0_oc; // gpio0_output_control
-	int gpio1_oc; // gpio1_output_control
-	int gpio2_oc; // gpio2_output_control
-	int gpio3_oc; // gpio3_output_control
+// 	int gpio0_oc; // gpio0_output_control
+// 	int gpio1_oc; // gpio1_output_control
+// 	int gpio2_oc; // gpio2_output_control
+// 	int gpio3_oc; // gpio3_output_control
 
-	/* reference output clock control parameters */
-	int hs_clk_div;
-	int div_m_val;
-	int div_n_val;
+// 	/* reference output clock control parameters */
+// 	int hs_clk_div;
+// 	int div_m_val;
+// 	int div_n_val;
 
-	int vc_map; // virtual channel mapping
-};
+// 	int vc_map; // virtual channel mapping
+// };
 
 
-struct ds90ub954_priv {
-	struct i2c_client *client;
-	struct regmap *regmap;
-	struct ds90ub953_priv *ser[NUM_SERIALIZER]; //serializers
-	int pass_gpio;
-	int lock_gpio;
-	int pdb_gpio;
-	int sel_rx_port; // selected rx port
-	int sel_ia_config; // selected ia configuration
-	int csi_lane_count;
-	int csi_lane_speed;
-	int test_pattern;
-	int num_ser; // number of serializers connected
-	int conts_clk; // continuous clock (0: discontinuous, 1: continuous)
+// struct ds90ub954_priv {
+// 	struct i2c_client *client;
+// 	struct regmap *regmap;
+// 	struct ds90ub953_priv *ser[NUM_SERIALIZER]; //serializers
+// 	int pass_gpio;
+// 	int lock_gpio;
+// 	int pdb_gpio;
+// 	int sel_rx_port; // selected rx port
+// 	int sel_ia_config; // selected ia configuration
+// 	int csi_lane_count;
+// 	int csi_lane_speed;
+// 	int test_pattern;
+// 	int num_ser; // number of serializers connected
+// 	int conts_clk; // continuous clock (0: discontinuous, 1: continuous)
 
-    int gpio0_oe; // des-gpio0_output_enable
-    int gpio1_oe; // des-gpio1_output_enable
-    int gpio2_oe; // des-gpio2_output_enable
-    int gpio3_oe; // des-gpio3_output_enable
-    int gpio4_oe; // des-gpio4_output_enable
-    int gpio5_oe; // des-gpio5_output_enable
-    int gpio6_oe; // des-gpio6_output_enable
+//     int gpio0_oe; // des-gpio0_output_enable
+//     int gpio1_oe; // des-gpio1_output_enable
+//     int gpio2_oe; // des-gpio2_output_enable
+//     int gpio3_oe; // des-gpio3_output_enable
+//     int gpio4_oe; // des-gpio4_output_enable
+//     int gpio5_oe; // des-gpio5_output_enable
+//     int gpio6_oe; // des-gpio6_output_enable
 
-    int gpio0_oc; // des-gpio0_output_control
-    int gpio1_oc; // des-gpio1_output_control
-    int gpio2_oc; // des-gpio2_output_control
-    int gpio3_oc; // des-gpio3_output_control
-    int gpio4_oc; // des-gpio4_output_control
-    int gpio5_oc; // des-gpio5_output_control
-    int gpio6_oc; // des-gpio6_output_control
-};
+//     int gpio0_oc; // des-gpio0_output_control
+//     int gpio1_oc; // des-gpio1_output_control
+//     int gpio2_oc; // des-gpio2_output_control
+//     int gpio3_oc; // des-gpio3_output_control
+//     int gpio4_oc; // des-gpio4_output_control
+//     int gpio5_oc; // des-gpio5_output_control
+//     int gpio6_oc; // des-gpio6_output_control
+// };
 
 
 // new Driver Flags for 971

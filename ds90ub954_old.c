@@ -2178,7 +2178,6 @@ static int ds90ub954_remove(struct i2c_client *client)
 
 static const struct i2c_device_id ds90ub954_id[] = {
 	{"ti,ds90ub954", 0},
-	{"ti,ds90ub9702", 1},
 	{/* sentinel */},
 };
 

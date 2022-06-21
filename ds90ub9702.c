@@ -145,7 +145,8 @@ static int ds90ub9702_write(const struct ds90ub9702_priv *priv, unsigned int reg
 	int err;
 
 	err = regmap_write(priv->regmap, reg, val);
-	if (err) {
+	if (err)
+	{
 		dev_err(&priv->client->dev,
 				"Cannot write register 0x%02x (%d)!\n", reg, err);
 	}

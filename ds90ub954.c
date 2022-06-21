@@ -34,11 +34,14 @@
 
 #include "ds90ub954.h"
 
+//#define DEBUG
+
 #define ENABLE_SYSFS_TP /* /sys/bus/i2c/devices/0-0018 */
 
 static const struct of_device_id ds90ub954_of_match[] = {
 	{
 		.compatible = "ti,ds90ub954",
+
 	},
 	{/* sentinel */},
 };
@@ -48,9 +51,14 @@ const struct regmap_config ds90ub954_regmap_config = {
 	.val_bits = 8,
 };
 
-const struct regmap_config ds90ub953_regmap_config = {
-	.reg_bits = 8,
-	.val_bits = 8,
+// const struct regmap_config ds90ub953_regmap_config = { // Old serializer
+// 	.reg_bits = 8,
+// 	.val_bits = 8,
+// };
+
+const struct regmap_config ds90ub971_regmap_config = {
+		.reg_bits = 8,
+		.val_bits = 8,
 };
 
 /* 4096x2160 */
@@ -124,7 +132,7 @@ static const u8 ds90ub95x_tp_reg_val[] = {
  * DS90UB954 FUNCTIONS
  *----------------------------------------------------------------------------*/
 
-static int ds90ub954_read(struct ds90ub954_priv *priv, unsigned int reg,
+static int ds90ub954_read(struct  ds90ub9702_priv *priv, unsigned int reg,
 						  unsigned int *val)
 {
 	int err;
@@ -137,7 +145,7 @@ static int ds90ub954_read(struct ds90ub954_priv *priv, unsigned int reg,
 	return err;
 }
 
-static int ds90ub954_write(const struct ds90ub954_priv *priv, unsigned int reg,
+static int ds90ub954_write(const struct  ds90ub9702_priv *priv, unsigned int reg,
 						   unsigned int val)
 {
 	int err;
@@ -151,7 +159,7 @@ static int ds90ub954_write(const struct ds90ub954_priv *priv, unsigned int reg,
 	return err;
 }
 
-static int ds90ub954_write_rx_port(struct ds90ub954_priv *priv, int rx_port,
+static int ds90ub954_write_rx_port(struct  ds90ub9702_priv *priv, int rx_port,
 								   int addr, int val)
 {
 	struct device *dev = &priv->client->dev;
@@ -210,7 +218,7 @@ write_rx_port_err:
 }
 
 #ifdef DEBUG
-static int ds90ub954_read_rx_port(struct ds90ub954_priv *priv, int rx_port,
+static int ds90ub954_read_rx_port(struct  ds90ub9702_priv *priv, int rx_port,
 								  int addr, int *val)
 {
 	struct device *dev = &priv->client->dev;
@@ -257,7 +265,7 @@ read_rx_port_err:
 	return err;
 }
 
-static int ds90ub954_read_ia_reg(struct ds90ub954_priv *priv, int reg, int *val,
+static int ds90ub954_read_ia_reg(struct  ds90ub9702_priv *priv, int reg, int *val,
 								 int ia_config)
 {
 	int err = 0;
@@ -305,7 +313,7 @@ read_ia_reg_err:
 }
 #endif
 
-static int ds90ub954_disable_testpattern(struct ds90ub954_priv *priv)
+static int ds90ub954_disable_testpattern(struct  ds90ub9702_priv *priv)
 {
 	struct device *dev = &priv->client->dev;
 	int err = 0;
@@ -324,7 +332,7 @@ init_err:
 	return err;
 }
 
-static int ds90ub954_init_testpattern(struct ds90ub954_priv *priv)
+static int ds90ub954_init_testpattern(struct  ds90ub9702_priv *priv)
 {
 	struct device *dev = &priv->client->dev;
 	int i, err = 0;
@@ -344,8 +352,10 @@ static int ds90ub954_init_testpattern(struct ds90ub954_priv *priv)
 }
 
 #ifdef DEBUG
-static int ds90ub954_debug_prints(struct ds90ub954_priv *priv)
+static int ds90ub954_debug_prints(struct  ds90ub9702_priv *priv)
 {
+	struct device *dev = &priv->client->dev;
+
 	int i, val, ia_config = 0, err = 0;
 	/* print CSI timing of tx port 0 */
 	dev_info(dev, "%s: CSI timing\n", __func__);
@@ -416,7 +426,7 @@ static int ds90ub954_debug_prints(struct ds90ub954_priv *priv)
 };
 #endif
 
-static int ds90ub954_init(struct ds90ub954_priv *priv, int rx_port)
+static int ds90ub954_init(struct  ds90ub9702_priv *priv, int rx_port)
 {
 	struct device *dev = &priv->client->dev;
 	unsigned char dev_id, rev;
@@ -424,7 +434,7 @@ static int ds90ub954_init(struct ds90ub954_priv *priv, int rx_port)
 	int err = 0;
 	char id_code[TI954_RX_ID_LENGTH + 1];
 	int ser_nr = 0;
-	struct ds90ub953_priv *ds90ub953;
+	struct ds90ub971_priv *ds90ub953;
 
 	/*----------------------------------------------------------------------
 	 *  init deserializer
@@ -692,18 +702,18 @@ static int ds90ub954_init(struct ds90ub954_priv *priv, int rx_port)
 		/* set virtual channel id mapping */
 		err = ds90ub954_write_rx_port(priv, rx_port,
 									  TI954_REG_CSI_VC_MAP,
-									  ds90ub953->vc_map);
+									  ds90ub953->vc_map0);
 		if (unlikely(err))
 			goto ser_init_failed;
 		else
 		{
-			val = ds90ub953->vc_map & 0b11;
+			val = ds90ub953->vc_map0 & 0b11;
 			dev_info(dev, "%s: VC-ID 0 mapped to %i\n", __func__, val);
-			val = ((ds90ub953->vc_map & 0b1100) >> 2);
+			val = ((ds90ub953->vc_map0 & 0b1100) >> 2);
 			dev_info(dev, "%s: VC-ID 1 mapped to %i\n", __func__, val);
-			val = ((ds90ub953->vc_map & 0b110000) >> 4);
+			val = ((ds90ub953->vc_map0 & 0b110000) >> 4);
 			dev_info(dev, "%s: VC-ID 2 mapped to %i\n", __func__, val);
-			val = ((ds90ub953->vc_map & 0b11000000) >> 6);
+			val = ((ds90ub953->vc_map0 & 0b11000000) >> 6);
 			dev_info(dev, "%s: VC-ID 3 mapped to %i\n", __func__, val);
 		}
 
@@ -782,7 +792,7 @@ init_err:
 	return err;
 }
 
-static int ds90ub954_init_gpio(const struct ds90ub954_priv *priv)
+static int ds90ub954_init_gpio(const struct  ds90ub9702_priv *priv)
 {
 	struct device *dev = &priv->client->dev;
 	int err = 0;
@@ -839,7 +849,7 @@ done:
 	return err;
 }
 
-static void ds90ub954_free_gpio(const struct ds90ub954_priv *priv)
+static void ds90ub954_free_gpio(const struct  ds90ub9702_priv *priv)
 {
 
 	if (priv->pass_gpio >= 0)
@@ -856,7 +866,7 @@ static void ds90ub954_free_gpio(const struct ds90ub954_priv *priv)
 	}
 }
 
-static void ds90ub954_pwr_enable(const struct ds90ub954_priv *priv)
+static void ds90ub954_pwr_enable(const struct  ds90ub9702_priv *priv)
 {
 	if (priv->pdb_gpio >= 0)
 	{
@@ -864,7 +874,7 @@ static void ds90ub954_pwr_enable(const struct ds90ub954_priv *priv)
 	}
 }
 
-static void ds90ub954_pwr_disable(const struct ds90ub954_priv *priv)
+static void ds90ub954_pwr_disable(const struct  ds90ub9702_priv *priv)
 {
 	if (priv->pdb_gpio >= 0)
 	{
@@ -872,7 +882,7 @@ static void ds90ub954_pwr_disable(const struct ds90ub954_priv *priv)
 	}
 }
 
-static int ds90ub954_parse_dt(struct ds90ub954_priv *priv)
+static int ds90ub954_parse_dt(struct  ds90ub9702_priv *priv)
 {
 	struct device *dev = &priv->client->dev;
 	struct device_node *np = dev->of_node;
@@ -1251,7 +1261,7 @@ static ssize_t test_pattern_show_des(struct device *dev,
 									 struct device_attribute *attr,
 									 char *buf)
 {
-	struct ds90ub954_priv *priv;
+	struct  ds90ub9702_priv *priv;
 	priv = dev_get_drvdata(dev);
 	return snprintf(buf, PAGE_SIZE,
 					"Test Pattern is set to: %i\n", priv->test_pattern);
@@ -1261,7 +1271,7 @@ static ssize_t test_pattern_set_des(struct device *dev,
 									struct device_attribute *attr,
 									const char *buf, size_t count)
 {
-	struct ds90ub954_priv *priv;
+	struct  ds90ub9702_priv *priv;
 	int testpat;
 
 	priv = dev_get_drvdata(dev);
@@ -1289,11 +1299,12 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 				   test_pattern_set_des);
 #endif
 
+#ifdef OLD
 // /*------------------------------------------------------------------------------
 //  * DS90UB953 FUNCTIONS
 //  *----------------------------------------------------------------------------*/
 
-// static int ds90ub953_read(struct ds90ub953_priv *priv, unsigned int reg,
+// static int ds90ub953_read(struct ds90ub971_priv *priv, unsigned int reg,
 // 						  unsigned int *val)
 // {
 // 	int err;
@@ -1307,7 +1318,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return err;
 // }
 
-// static int ds90ub953_write(const struct ds90ub953_priv *priv, unsigned int reg,
+// static int ds90ub953_write(const struct ds90ub971_priv *priv, unsigned int reg,
 // 						   unsigned int val)
 // {
 // 	int err;
@@ -1321,7 +1332,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return err;
 // }
 
-// static int ds90ub953_disable_testpattern(struct ds90ub953_priv *priv)
+// static int ds90ub953_disable_testpattern(struct ds90ub971_priv *priv)
 // {
 // 	struct device *dev = &priv->client->dev;
 // 	int err = 0;
@@ -1340,7 +1351,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return err;
 // }
 
-// static int ds90ub953_init_testpattern(struct ds90ub953_priv *priv)
+// static int ds90ub953_init_testpattern(struct ds90ub971_priv *priv)
 // {
 // 	struct device *dev = &priv->client->dev;
 // 	int err = 0;
@@ -1364,7 +1375,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // static ssize_t test_pattern_show_ser(struct device *dev,
 // 									 struct device_attribute *attr, char *buf)
 // {
-// 	struct ds90ub953_priv *priv;
+// 	struct ds90ub971_priv *priv;
 // 	priv = dev_get_drvdata(dev);
 // 	return snprintf(buf, PAGE_SIZE,
 // 					"Test Pattern is set to: %i\n", priv->test_pattern);
@@ -1374,7 +1385,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 									struct device_attribute *attr,
 // 									const char *buf, size_t count)
 // {
-// 	struct ds90ub953_priv *priv;
+// 	struct ds90ub971_priv *priv;
 // 	int testpat;
 
 // 	priv = dev_get_drvdata(dev);
@@ -1404,7 +1415,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 
 // #endif
 
-// static int ds90ub953_init(struct ds90ub953_priv *priv)
+// static int ds90ub953_init(struct ds90ub971_priv *priv)
 // {
 // 	struct device *dev = &priv->client->dev;
 // 	int val, dev_id, i, val_2;
@@ -1541,7 +1552,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return err;
 // }
 
-// static void ds90ub953_free(struct ds90ub954_priv *priv)
+// static void ds90ub953_free(struct  ds90ub9702_priv *priv)
 // {
 // 	int i;
 // 	for (i = 0; i < priv->num_ser; i++)
@@ -1551,7 +1562,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	}
 // }
 
-// static int ds90ub953_regmap_init(struct ds90ub954_priv *priv, int ser_nr)
+// static int ds90ub953_regmap_init(struct  ds90ub9702_priv *priv, int ser_nr)
 // {
 // 	struct regmap *new_regmap = NULL;
 // 	struct device *dev = &priv->client->dev;
@@ -1572,12 +1583,12 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return err;
 // }
 
-// static int ds90ub953_alloc(struct ds90ub954_priv *priv, int ser_nr)
+// static int ds90ub953_alloc(struct  ds90ub9702_priv *priv, int ser_nr)
 // {
-// 	struct ds90ub953_priv *priv_ser;
+// 	struct ds90ub971_priv *priv_ser;
 // 	struct device *dev = &priv->client->dev;
 
-// 	priv_ser = devm_kzalloc(dev, sizeof(struct ds90ub953_priv), GFP_KERNEL);
+// 	priv_ser = devm_kzalloc(dev, sizeof(struct ds90ub971_priv), GFP_KERNEL);
 // 	if (!priv)
 // 		return -ENOMEM;
 
@@ -1586,7 +1597,7 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return 0;
 // }
 
-// static int ds90ub953_i2c_client(struct ds90ub954_priv *priv, int ser_nr,
+// static int ds90ub953_i2c_client(struct  ds90ub9702_priv *priv, int ser_nr,
 // 								int addr)
 // {
 // 	struct i2c_client *new_client = NULL;
@@ -1609,14 +1620,14 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // }
 
 // static int ds90ub953_parse_dt(struct i2c_client *client,
-// 							  struct ds90ub954_priv *priv)
+// 							  struct  ds90ub9702_priv *priv)
 // {
 // 	struct device *dev = &client->dev;
 // 	struct device_node *des = dev->of_node;
 // 	struct device_node *ser;
 // 	struct device_node *sers;
 // 	struct of_phandle_args i2c_addresses;
-// 	struct ds90ub953_priv *ds90ub953;
+// 	struct ds90ub971_priv *ds90ub953;
 // 	int i = 0;
 
 // 	u32 val = 0;
@@ -2058,6 +2069,8 @@ static DEVICE_ATTR(test_pattern_des, 0664, test_pattern_show_des,
 // 	return 0;
 // }
 
+#endif //OLD
+
 /*------------------------------------------------------------------------------
  * DS90UB971 FUNCTIONS
  *----------------------------------------------------------------------------*/
@@ -2156,8 +2169,7 @@ static ssize_t test_pattern_set_ser(struct device *dev,
 	return PAGE_SIZE;
 }
 
-static DEVICE_ATTR(test_pattern_ser,
-0664, test_pattern_show_ser,
+static DEVICE_ATTR(test_pattern_ser, 0664, test_pattern_show_ser,
 test_pattern_set_ser);
 
 #endif
@@ -2198,22 +2210,21 @@ static int ds90ub971_init(struct ds90ub971_priv *priv) {
 			break;
 	}
 	err = ds90ub971_write(priv, TI971_REG_GENERAL_CFG,
-			/*(1<<TI971_I2C_STRAP_MODE) |*/                   //NEW
+						/*(1<<TI971_I2C_STRAP_MODE) |*/                   //NEW
 						  (1 << TI971_CRC_TX_GEN_ENABLE) |
 						  (val << TI971_CSI_LANE_SEL) |
 						  (priv->conts_clk << TI971_CONTS_CLK));
+	dev_info(dev, "%s:%d: After write Lane", __func__, __LINE__);
 	if (unlikely(err))
 		goto init_err;
 
 	// Set Mode to FPD3
-	err = ds90ub9702_write(priv, TI971_REG_MODE_SEL, 1 << TI971_MODE_OV);
-	if (unlikely(err))
-		goto init_err;
-
-	err = ds90ub9702_write(priv TI971_REG_MODE_SEL, 1 << TI971_MODE);
-
-	if (unlikely(err))
-		goto init_err;
+	// dev_info(dev, "%s:%d: Before set Mode to FPD3", __func__, __LINE__);
+	// err = ds90ub971_write(priv, TI971_REG_MODE_SEL,  1 << TI971_MODE_OV | 1 << TI971_MODE);
+	// if (unlikely(err))
+	// 	goto init_err;
+	// dev_info(dev, "%s:%d: After set Mode to FPD3", __func__, __LINE__);
+	//err = ds90ub971_read
 
 	//Set GPIO0 as output
 	err = ds90ub971_write(priv, TI971_REG_GPIO_CTRL, 0x1E);
@@ -2245,7 +2256,7 @@ static int ds90ub971_init(struct ds90ub971_priv *priv) {
 	if (unlikely(err))
 		goto init_err;
 	/*   NEW   */
-
+	dev_info(dev, "%s:%d: Spacer", __func__, __LINE__);
 	/* setup GPIOs to input/output */
 	val = 0;
 	if (priv->gpio0_oe)
@@ -2267,7 +2278,6 @@ static int ds90ub971_init(struct ds90ub971_priv *priv) {
 		val |= 0b10000000;
 	else
 		val |= 0b00001000;
-
 
 	val_2 = 0;
 	if (priv->gpio0_oe)
@@ -2297,6 +2307,7 @@ static int ds90ub971_init(struct ds90ub971_priv *priv) {
 	if (unlikely(err))
 		goto init_err;
 
+	//dev_info(dev, "%s:%d: Spacer", __func__, __LINE__);
 	/* check if test pattern should be turned on*/
 	if (priv->test_pattern == 1) {
 		dev_info(dev, "%s: serializer rx_port %i init testpattern\n",
@@ -2399,7 +2410,8 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 
 	/* get serializers device_node from dt */
 	sers = of_get_child_by_name(des, "serializers");
-	if (!sers) {
+	if (!sers)
+	{
 		dev_info(dev, "%s: no serializers found in device tree\n",
 				 __func__);
 		return 0;
@@ -2411,7 +2423,8 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 	for_each_child_of_node(sers, ser)
 	{
 
-		if (counter >= NUM_SERIALIZER) {
+		if (counter >= NUM_SERIALIZER)
+		{
 			dev_info(dev, "%s: too many serializers found in device tree\n",
 					 __func__);
 			break;
@@ -2419,7 +2432,8 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 
 		/* allocate memory for serializer */
 		err = ds90ub971_alloc(priv, counter);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - allocating ds90ub971 failed\n",
 					 __func__);
 			goto next;
@@ -2428,14 +2442,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 
 		/* get rx-channel */
 		err = of_property_read_u32(ser, "rx-channel", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - rx-channel property not found\n",
 					 __func__);
 			/* default value: 0 */
 			ds90ub971->rx_channel = 0;
 			dev_info(dev, "%s: rx-channel set to default val: 0\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set rx-channel*/
 			ds90ub971->rx_channel = val;
 			dev_info(dev, "%s: - serializer rx-channel: %i\n",
@@ -2474,7 +2491,9 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 			ds90ub971->csi_lane_count = 4;
 			dev_info(dev, "%s: csi-lane-count set to default val: 4\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set csi-lane-count*/
 			ds90ub971->csi_lane_count = val;
 			dev_info(dev, "%s: - csi-lane-count %i\n", __func__, val);
@@ -2482,14 +2501,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 
 		/* GPIO output enable */
 		err = of_property_read_u32(ser, "gpio0-output-enable", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio0-output-enable property not found\n",
 					 __func__);
 			/* default value: 0 */
 			ds90ub971->gpio0_oe = 0;
 			dev_info(dev, "%s: gpio0-output-enable to default val: 0\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio0-output-enable*/
 			ds90ub971->gpio0_oe = val;
 			dev_info(dev, "%s: - gpio0-output-enable %i\n",
@@ -2497,7 +2519,8 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "gpio1-output-enable", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio1-output-enable property not found\n",
 					 __func__);
 
@@ -2505,7 +2528,9 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 			ds90ub971->gpio1_oe = 0;
 			dev_info(dev, "%s: gpio1-output-enable to default val: 0\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio1-output-enable*/
 			ds90ub971->gpio1_oe = val;
 			dev_info(dev, "%s: - gpio1-output-enable %i\n",
@@ -2513,14 +2538,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "gpio2-output-enable", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio2-output-enable property not found\n",
 					 __func__);
 			/* default value: 0 */
 			ds90ub971->gpio2_oe = 0;
 			dev_info(dev, "%s: gpio2-output-enable to default val: 0\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio2-output-enable*/
 			ds90ub971->gpio2_oe = val;
 			dev_info(dev, "%s: - gpio2-output-enable %i\n",
@@ -2528,14 +2556,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "gpio3-output-enable", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio3-output-enable property not found\n",
 					 __func__);
 			/* default value: 0 */
 			ds90ub971->gpio3_oe = 0;
 			dev_info(dev, "%s: gpio3-output-enable to default val: 0\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio3-output-enable*/
 			ds90ub971->gpio3_oe = val;
 			dev_info(dev, "%s: - gpio3-output-enable %i\n",
@@ -2544,14 +2575,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 
 		/* GPIO output control */
 		err = of_property_read_u32(ser, "gpio0-control", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio0-control property not found\n",
 					 __func__);
 			/* default value: 0b1000 */
 			ds90ub971->gpio0_oc = 0b1000;
 			dev_info(dev, "%s: gpio0-control to default val: 0b1000\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio0-control*/
 			ds90ub971->gpio0_oc = val;
 			dev_info(dev, "%s: - gpio0-control %i\n",
@@ -2559,7 +2593,8 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "gpio1-control", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio1-control property not found\n",
 					 __func__);
 
@@ -2567,7 +2602,9 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 			ds90ub971->gpio1_oc = 0b1000;
 			dev_info(dev, "%s: gpio1-control to default val: 0b1000\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio1-control*/
 			ds90ub971->gpio1_oc = val;
 			dev_info(dev, "%s: - gpio1-control %i\n",
@@ -2575,14 +2612,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "gpio2-control", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio2-control property not found\n",
 					 __func__);
 			/* default value: 0b1000 */
 			ds90ub971->gpio2_oc = 0b1000;
 			dev_info(dev, "%s: gpio2-control to default val: 0b1000\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio2-control*/
 			ds90ub971->gpio2_oc = val;
 			dev_info(dev, "%s: - gpio2-control %i\n",
@@ -2590,14 +2630,17 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "gpio3-control", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - gpio3-control property not found\n",
 					 __func__);
 			/* default value: 0b1000 */
 			ds90ub971->gpio3_oc = 0b1000;
 			dev_info(dev, "%s: gpio3-control to default val: 0b1000\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set gpio3-control*/
 			ds90ub971->gpio3_oc = val;
 			dev_info(dev, "%s: - gpio3-control %i\n",
@@ -2605,7 +2648,8 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		/* err = of_property_read_u32(ser, "hs-clk-div", &val);                     //NEW
-		if(err) {
+		if(err)
+		{
 			dev_info(dev, "%s: - hs-clk-div property not found\n",
 				 __func__);
 
@@ -2683,28 +2727,34 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		}
 
 		err = of_property_read_u32(ser, "div-m-val", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - div-m-val property not found\n",
 					 __func__);
 			/* default value: 1 */
 			ds90ub971->div_m_val = 1;
 			dev_info(dev, "%s: - div-m-val set to default val: 1\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set div-m-val*/
 			ds90ub971->div_m_val = val;
 			dev_info(dev, "%s: - div-m-val %i\n", __func__, val);
 		}
 
 		err = of_property_read_u32(ser, "div-n-val", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - div-n-val property not found\n",
 					 __func__);
 			/* default value: 0x28 */
 			ds90ub971->div_n_val = 0x28;
 			dev_info(dev, "%s: - div-n-val set to default val: 0x28\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			/* set div-n-val*/
 			ds90ub971->div_n_val = val;
 			dev_info(dev, "%s: - div-n-val %i\n", __func__, val);
@@ -2712,25 +2762,30 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 
 		/* get i2c address */
 		err = of_property_read_u32(ser, "i2c-address", &val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - i2c-address not found\n", __func__);
 			ds90ub971->i2c_address = 0x18;
 			dev_info(dev, "%s: - i2c-address set to default val: 0x18\n",
 					 __func__);
-		} else {
+		}
+		else
+		{
 			dev_info(dev, "%s: - i2c-address: 0x%X \n", __func__, val);
 			ds90ub971->i2c_address = val;
 		}
 
 		err = ds90ub971_i2c_client(priv, counter, val);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - ds90ub971_i2c_client failed\n",
 					 __func__);
 			goto next;
 		}
 
 		err = ds90ub971_regmap_init(priv, counter);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - ds90ub971_regmap_init failed\n",
 					 __func__);
 			goto next;
@@ -2739,11 +2794,14 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		/* get i2c-slave addresses*/
 		err = of_parse_phandle_with_args(ser, "i2c-slave", "list-cells",
 										 0, &i2c_addresses);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - reading i2c-slave addresses failed\n",
 					 __func__);
 			ds90ub971->i2c_alias_num = 0;
-		} else {
+		}
+		else
+		{
 			ds90ub971->i2c_alias_num = i2c_addresses.args_count;
 			/* writting i2c slave addresses into array*/
 			for (i = 0; (i < i2c_addresses.args_count) &&
@@ -2755,11 +2813,14 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 		/* get slave-aliases */
 		err = of_parse_phandle_with_args(ser, "slave-alias",
 										 "list-cells", 0, &i2c_addresses);
-		if (err) {
+		if (err)
+		{
 			dev_info(dev, "%s: - reading i2c slave-alias addresses failed\n",
 					 __func__);
 			ds90ub971->i2c_alias_num = 0;
-		} else {
+		}
+		else
+		{
 			dev_info(dev, "%s: - num of slave alias pairs: %i\n",
 					 __func__, i2c_addresses.args_count);
 			/* writting i2c alias addresses into array*/
@@ -2840,14 +2901,14 @@ static int ds90ub971_parse_dt(struct i2c_client *client,
 static int ds90ub954_probe(struct i2c_client *client,
 						   const struct i2c_device_id *id)
 {
-	struct ds90ub954_priv *priv;
+	struct  ds90ub9702_priv *priv;
 	struct device *dev = &client->dev;
 	int err;
 	int i = 0;
 
 	dev_info(dev, "%s: start\n", __func__);
 
-	priv = devm_kzalloc(dev, sizeof(struct ds90ub954_priv), GFP_KERNEL);
+	priv = devm_kzalloc(dev, sizeof(struct ds90ub9702_priv), GFP_KERNEL);
 	if (!priv)
 		return -ENOMEM;
 
@@ -2941,8 +3002,9 @@ err_parse_dt:
 
 static int ds90ub954_remove(struct i2c_client *client)
 {
-	struct ds90ub954_priv *priv = dev_get_drvdata(&client->dev);
+	struct ds90ub9702_priv *priv = dev_get_drvdata(&client->dev);
 
+	dev_info(&client->dev, "ds90ub954_971 start removing");
 	ds90ub971_free(priv);
 	ds90ub954_pwr_disable(priv);
 	ds90ub954_free_gpio(priv);
