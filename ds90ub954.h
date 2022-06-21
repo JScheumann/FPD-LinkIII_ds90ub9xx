@@ -1,10 +1,10 @@
 /*
- * ds90ub954.c - TI DS90UB954 deserializer and DS90UB953 serializer driver
+ * ds90ub954.c - TI DS90UB954 deserializer and DS90UB971 serializer driver
  *
- * Copyright (c) 2020, Institut of Embedded Systems ZHAW
+ * Copyright (c) 2022, HAIP Solutions GmbH
  *
  * This program is for the DS90UB954 FDP Link III deserializer in connection
- * with the DS90UB953 serializer from Texas Instruments
+ * with the DS90UB971 serializer from Texas Instruments
  *
  *
  * This program is free software; you can redistribute it and/or modify it
